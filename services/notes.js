@@ -20,12 +20,6 @@ function makeResponse(path, files, callback) {
         });
 }
 
-function error(msg) {
-        var response = {};
-        response['error'] = msg;
-        return response;
-}
-
 function get(userid, count, noteid, callback) {
         if(!count)
                 count = 1;
@@ -45,24 +39,24 @@ function get(userid, count, noteid, callback) {
                                                           makeResponse(path, files.slice(index, (index+count > files.length)?files.length:index+count), callback);
                                                     } else {
                                                           console.log("Could not find "+noteid);
-                                                          callback(false, error("Could not find "+noteid));
+                                                          callback(false, {"error" : "Could not find "+noteid});
                                                     }
                                                   } else {
                                                           console.log(err);
-                                                          callback(false, error(""));
+                                                          callback(false, {"error" : ""});
                                                   }
                                           });
                                   } else if(err) {
                                           console.log(err);
-                                          callback(false, error(""));
+                                          callback(false, {"error" : ""});
                                   } else {
                                           console.log(userid + " not a directory.");
-                                          callback(false, error(""));
+                                          callback(false, {"error" : ""});
                                   }
                           });
                 } else {
                         console.log(userid+" not found.");
-                        callback(false, error(userid+" not found."));
+                        callback(false, {"error" : userid+" not found."});
                 }
         });
 }
@@ -81,13 +75,26 @@ function create(userid, note, callback) {
                         file.write("\n~~~"+jsonDate+"~~~\n");
                         file.write(note.body);
                         callback(true, hash);
-                }
-        }
+                });
+        });
 }
 
-function delete(userid, noteid, callback) {
+function remove(userid, noteid, callback) {
         console.log("Deleting "+noteid+" for "+userid);
-        fs.exists
+        var path = BASE+"/"+userid+"/"+noteid;
+        fs.exists(path, function(exists) {
+                if(exists) {
+                        fs.unlink(path, function (err) {
+                                if(err) callback(false, {"error" : "Could not remove."});
+                                else callback(true, {"done":""});
+                        });
+                }
+                else {
+                        callback(true, {"done":""});
+                }
+        });
+}
 
 exports.get = get;
 exports.create = create;
+exports.remove = remove;
