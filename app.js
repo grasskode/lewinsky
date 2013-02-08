@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -6,7 +5,6 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var request = require('request');
-var CONFIG = require('config');
 var log4js = require('log4js');
 var _ = require('underscore');
 
@@ -18,10 +16,8 @@ var logger = require(LIB_DIR + 'log_factory').create("app");
  */
 var app = express();
 
-var port = 8080;
-
 app.configure(function(){
-  app.set('port', port);
+  app.set('port', CONFIG.port);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.set('view options', {layout : false});
