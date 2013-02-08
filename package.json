@@ -16,6 +16,8 @@
     "patio" : "*",
     "comb" : "*",
     "underscore" : "*",
-    "vows" : "*"
+    "vows" : "*",
+    "twilio-js" : "*",
+    "node-schedule" : "*"
   }
 }
