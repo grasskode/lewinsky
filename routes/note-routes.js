@@ -42,7 +42,7 @@ module.exports = function(app) {
 
         app.delete("/:userid/notes/:noteid", function(req, res) {
                 console.log("Deleting note "+req.params.noteid+" for user "+req.params.userid);
-                s_notes.delete(req.params.userid, req.params.noteid, function(success, response) {
+                s_notes.remove(req.params.userid, req.params.noteid, function(success, response) {
                         if(success)
                           respond(res, 200, JSON.stringify(response));
                         else
