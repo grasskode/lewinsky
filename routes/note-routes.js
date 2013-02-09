@@ -10,8 +10,6 @@ module.exports = function(app) {
         app.get("/:userid/notes", function(req, res) {
                 console.log("Getting notes for user "+req.params.userid);
                 s_notes.get(req.params.userid, req.query.count, null, function(success, response){
-                        console.log(response);
-                        console.log(JSON.stringify(response));
                         if(success)
                           respond(res, 200, JSON.stringify(response));
                         else
@@ -21,7 +19,7 @@ module.exports = function(app) {
 
         app.get("/:userid/notes/:noteid", function(req, res) {
                 console.log("Getting note "+req.params.noteid+" for user "+req.params.userid);
-                s_notes.get(req.params.userid, req.query.count, req.params.noteid, function(success, response){
+                s_notes.get(req.params.userid, req.params.noteid, function(success, response){
                         if(success)
                           respond(res, 200, JSON.stringify(response));
                         else 

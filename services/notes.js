@@ -1,100 +1,145 @@
 var fs = require("fs");
 var crypto = require('crypto');
+var mysql = require("mysql");
+var parser = require("./note-parser");
 
-var BASE = CONFIG.data_base;
-
-function makeResponse(path, files, callback) {
-        var response = {};
-        var count = files.length;
-        files.forEach(function (file) {
-                console.log("reading file : "+path+"/"+file);
-                fs.readFile(path+"/"+file, "utf8", function(err, data) {
-                    if(!err) {
-                            response[file] = data;
-                    }
-                    else
-                            console.log(err);
-                    if(--count == 0)
-                            callback(true, response);
-            });
+function searchSubject(userid, subject, callback) {
+        console.log("Searching "+userid+"'s notes for subject "+subject);
+        var connection = mysql.createConnection({
+          host : CONFIG.db.host,
+          database : CONFIG.db.database,
+          user : CONFIG.db.user,
+          password : CONFIG.db.password,
         });
+        var query = "SELECT * FROM notes WHERE `user`="+connection.escape(userid)+" and `subject`="+connection.escape(subject)+" ORDER BY `note_id`, `creation_epoch`";
+        var sqlquery = connection.query(query, function (err, results) {
+              if(err) {
+                console.log(err);
+                callback(false, {"error" : "could not get notes"});
+              } else {
+                var response = parser.consolidate(results);
+                callback(true, response);
+              }
+              connection.destroy();
+        });
+        console.log(sqlquery.sql);
 }
 
-function get(userid, count, noteid, callback) {
+function searchCron(userid, cron, callback) {
+        console.log("Searching "+userid+"'s notes for cron "+cron);
+        var connection = mysql.createConnection({
+          host : CONFIG.db.host,
+          database : CONFIG.db.database,
+          user : CONFIG.db.user,
+          password : CONFIG.db.password,
+        });
+        var query = "SELECT * FROM notes WHERE `cron` REGEXP '"+cron+"' ORDER BY `note_id`, `creation_epoch`";
+        var sqlquery = connection.query(query, function (err, results) {
+              if(err) {
+                console.log(err);
+                callback(false, {"error" : "could not get notes"});
+              } else {
+                var response = parser.consolidate(results);
+                callback(true, response);
+              }
+              connection.destroy();
+        });
+        console.log(sqlquery.sql);
+}
+
+function get(userid, noteid, callback) {
+        console.log("Getting "+noteid+" for "+userid);
+        
+        var connection = mysql.createConnection({
+          host : CONFIG.db.host,
+          database : CONFIG.db.database,
+          user : CONFIG.db.user,
+          password : CONFIG.db.password,
+        });
+        var query = "SELECT * FROM notes WHERE `user`="+connection.escape(userid)+" and `note_id`="+connection.escape(noteid)+" ORDER BY `note_id`, `creation_epoch`";
+        var sqlquery = connection.query(query, function (err, results) {
+              if(err) {
+                console.log(err);
+                callback(false, {"error" : "could not get notes"});
+              } else {
+                var response = parser.consolidate(results);
+                callback(true, response);
+              }
+              connection.destroy();
+        });
+        console.log(sqlquery.sql);
+}
+
+/*function get(userid, count, from, callback) {
         if(!count)
                 count = 1;
-        console.log("Getting "+count+" notes for "+userid+" from "+noteid);
-        var path = BASE+"/"+userid;
-        var response;
-        fs.exists(path, function (exists) {
-                if(exists){
-                          fs.stat(path, function(err, stats) {
-                                  if(!err && stats.isDirectory()) {
-                                          fs.readdir(path, function(err, files) {
-                                                  if(!err){
-                                                    var index = 0;
-                                                    if(noteid)
-                                                          index = files.indexOf(noteid);
-                                                    if(index >= 0) {
-                                                          makeResponse(path, files.slice(index, (index+count > files.length)?files.length:index+count), callback);
-                                                    } else {
-                                                          console.log("Could not find "+noteid);
-                                                          callback(false, {"error" : "Could not find "+noteid});
-                                                    }
-                                                  } else {
-                                                          console.log(err);
-                                                          callback(false, {"error" : ""});
-                                                  }
-                                          });
-                                  } else if(err) {
-                                          console.log(err);
-                                          callback(false, {"error" : ""});
-                                  } else {
-                                          console.log(userid + " not a directory.");
-                                          callback(false, {"error" : ""});
-                                  }
-                          });
-                } else {
-                        console.log(userid+" not found.");
-                        callback(false, {"error" : userid+" not found."});
-                }
+        console.log("Getting "+count+" notes for "+userid+" from "+from);
+        
+        var connection = mysql.createConnection({
+          host : CONFIG.db.host,
+          database : CONFIG.db.database,
+          user : CONFIG.db.user,
+          password : CONFIG.db.password,
         });
-}
+        var query = "SELECT * FROM notes WHERE `user`="+connection.escape(userid)+" ORDER BY `note_id`, `creation_epoch`";
+        var sqlquery = connection.query(query, function (err, results) {
+              if(err) {
+                console.log(err);
+                callback(false, {"error" : "could not get notes"});
+              } else {
+                var response = parser.consolidate(results, count, noteid);
+                console.log(response);
+                callback(true, response);
+              }
+              connection.destroy();
+        });
+        console.log(sqlquery.sql);
+}*/
 
 function create(userid, note, callback) {
         console.log("Creating a new note for "+userid);
-        var hash = crypto.createHash('md5').update(note.subject).digest("hex");
-        var jsonDate = new Date().toJSON();
-        fs.exists(BASE, function(exists) {
-                if(!exists)
-                  fs.mkdirSync(BASE, 0755);
-                fs.exists(BASE+"/"+userid, function(exists) {
-                        if(!exists)
-                          fs.mkdirSync(BASE+"/"+userid, 0755);
-                        var file = fs.createWriteStream(BASE+"/"+userid+"/"+hash, {'flags': 'a'});
-                        file.write("\n~~~"+jsonDate+"~~~\n");
-                        file.write(note.body);
-                        callback(true, hash);
-                });
+        var connection = mysql.createConnection({
+          host : CONFIG.db.host,
+          database : CONFIG.db.database,
+          user : CONFIG.db.user,
+          password : CONFIG.db.password,
         });
+        var hash = crypto.createHash('md5').update(note.subject).digest("hex");
+        var values = {note_id : hash, user : userid, subject : note.subject, body : note.body, creation_epoch : new Date().getTime()};
+        var sqlquery = connection.query("INSERT INTO notes SET ?", values, function (err, result) {
+              if(err) {
+                console.log(err);
+                callback(false, {"error" : "could not add note"});
+              } else {
+                callback(true, hash);
+              }
+              connection.destroy();
+        });
+        console.log(sqlquery.sql);
 }
 
 function remove(userid, noteid, callback) {
         console.log("Deleting "+noteid+" for "+userid);
-        var path = BASE+"/"+userid+"/"+noteid;
-        fs.exists(path, function(exists) {
-                if(exists) {
-                        fs.unlink(path, function (err) {
-                                if(err) callback(false, {"error" : "Could not remove."});
-                                else callback(true, {"done":""});
-                        });
-                }
-                else {
-                        callback(true, {"done":""});
-                }
+        var connection = mysql.createConnection({
+          host : CONFIG.db.host,
+          database : CONFIG.db.database,
+          user : CONFIG.db.user,
+          password : CONFIG.db.password,
         });
+        var sqlquery = connection.query("DELETE FROM notes WHERE `note_id`="+connection.escape(noteid)+" and `user`="+connection.escape(userid), function (err, result) {
+              if(err) {
+                console.log(err);
+                callback(false, {"error" : "could not remove note"});
+              } else {
+                callback(true, "done");
+              }
+              connection.destroy();
+        });
+        console.log(sqlquery.sql);
 }
 
 exports.get = get;
 exports.create = create;
 exports.remove = remove;
+exports.searchSubject = searchSubject;
+exports.searchCron = searchCron;

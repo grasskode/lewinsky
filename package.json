@@ -17,6 +17,7 @@
     "patio" : "*",
     "comb" : "*",
     "underscore" : "*",
+    "mysql" : "2.0.0-alpha7",
     "vows" : "*"
   }
 }
