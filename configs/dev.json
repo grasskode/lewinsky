@@ -3,7 +3,7 @@
     "host" : "localhost",
     "database" : "mypa",
     "user" : "root",
-    "password" : ""
+    "password" : "root"
   },
 
   "log" : {

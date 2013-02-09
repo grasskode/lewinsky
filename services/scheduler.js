@@ -6,6 +6,10 @@ var Email = require('./email');
 var notesImpl = require('./notes');
 
 var Scheduler = function(){
+  this.createCron = function(date, repeat) {
+    return date+"::"+repeat;
+  }
+
 	/**
 	 * -> Search for all the notes scheduled for today (or the remaining time)
 	 * 	-> Create a cron expression
