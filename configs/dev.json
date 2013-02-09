@@ -1,4 +1,11 @@
-{ 
+{
+  "db" : {
+    "host" : "localhost",
+    "database" : "mypa",
+    "user" : "root",
+    "password" : "root"
+  },
+
   "log" : {
     "appenders": [
       {"type" : "console"},
