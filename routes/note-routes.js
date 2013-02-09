@@ -38,7 +38,7 @@ module.exports = function(app) {
                 });
         });
 
-        app.delete("/:userid/notes/:noteid", function(req, res) {
+        app["delete"]("/:userid/notes/:noteid", function(req, res) {
                 console.log("Deleting note "+req.params.noteid+" for user "+req.params.userid);
                 s_notes.remove(req.params.userid, req.params.noteid, function(success, response) {
                         if(success)
