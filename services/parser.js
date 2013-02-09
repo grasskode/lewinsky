@@ -42,7 +42,7 @@ function tokenizer(text) {
 }
 
 function tokenList() {
-  this.list = ["@date", "@repeat", "@to"];
+  this.list = ["@date", "@repeat", "@to", "@action"];
   
   this.extract = function(token) {
     for(var index in this.list ) {
@@ -81,5 +81,3 @@ function parse(text) {
 
 exports.consolidate = consolidate;
 exports.parse = parse;
-
-console.log(parse("Hello @datehello @tohello @datehell o how low!"));
