@@ -11,7 +11,7 @@ var Email = comb.define(Communication,{
 		send : function(to, noteSubject){
 			this.fetchNote(noteSubject, function(err, note){
 				if(!err){
-					var to = note.recepient_email;
+					var to = note.receipent_mail;
 					var subject = note.subject;
 					var text = note.body;
 					

@@ -12,7 +12,6 @@ var SMS = comb.define(Communication,{
 		send : function(to, noteSubject){
 			this.fetchNote(noteSubject, function(err, note){
 				if(!err){
-					var to = note.recepient_number;
 					var text = note.body;
 					Twilio.SMS.create({
 						to: to, 

@@ -20,22 +20,24 @@ var Scheduler = function(){
 		 * --> [0-59] [0-23] * 12 [0-7] 2012
 		 */
 		var date = base ? base : new Date();
-		notesImpl.searchCron('^[-0-9,\*]* [-0-9,\*]* [-0-9,\*]*[[:<:]]' + 
-				date.getDate() + 
-				'[[:>:]][-0-9,\*]* [-0-9,\*]* [-0-9,\*]* [-0-9,\*]*[[:<:]]' + 
-				date.getFullYear() + '[[:>:]][-0-9,\*]*',
+		notesImpl.searchCron('^[-0-9,\*]* [-0-9,\*]* ' + 
+				'[-0-9,\*]*[[:<:]]' + date.getDate() + '[[:>:]][-0-9,\*]* [-0-9,\*]* [-0-9,\*]*' + 
+				'( [-0-9,\*]*[[:<:]]' + date.getFullYear() + '[[:>:]][-0-9,\*]*)?',
 			function(err, data){
 				if(!err){
 					notes = data;
+					logger.info(Object.keys(notes).length + " notes found for scheduling");
 					_.each(notes, function(note){
 						var userId = note.user;
 						var subject = note.subject;
-						var number = note.receiver_number;
-						var email = note.receiver_email;
+						var number = note.receipent_ph_num;
+						var email = note.receipent_mail;
+						
 						var noteMap = note.creation_epoch;
 						_.each(noteMap, function(entry){
 							var cron = entry.cron;
 							// TODO verfiy the next execution time of the cron is in the current day
+							
 							
 							var actions = entry.actions;
 							_.each(actions, function(action){
