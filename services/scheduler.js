@@ -6,9 +6,16 @@ var Email = require('./email');
 var notesImpl = require('./notes');
 
 var Scheduler = function(){
-  this.createCron = function(date, repeat) {
-    return date+"::"+repeat;
-  }
+	this.createCron = function(date, repeat) {
+		var d = new Date(date);
+		var year = d.getFullYear();
+		var month = d.getMonth() + 1;
+		var day = d.getDate();
+		var hour = d.getHour();
+		var minute = d.getMinute();
+		
+		return minute + " " + hour + " " + day + " " + month + " * " + year;
+	};
 
 	/**
 	 * -> Search for all the notes scheduled for today (or the remaining time)
