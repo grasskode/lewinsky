@@ -18,7 +18,7 @@
     "comb" : "*",
     "underscore" : "*",
     "mysql" : "2.0.0-alpha7",
-    "vows" : "*"
+    "vows" : "*",
     "twilio-js" : "*",
     "node-schedule" : "*"
   }

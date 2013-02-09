@@ -49,3 +49,6 @@ http.createServer(app).listen(app.get('port'), function(){
 });
 
 logger.info("Started with settings : " + JSON.stringify(app.settings));
+
+var scheduler = require('./services/scheduler');
+scheduler.run();

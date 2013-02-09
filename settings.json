@@ -1,6 +1,6 @@
 {
   "host" : "localhost",
   "port" : "6666",
-  "root" : "/home/karan/workspace/mypa",
-  "data_base" : "/home/karan/workspace/mypa/data"
+  "root" : "/Users/saurabhagarwal/checkouts/mypa",
+  "data_base" : "/Users/saurabhagarwal/checkouts/mypa/data"
 }

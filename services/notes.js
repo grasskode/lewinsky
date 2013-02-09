@@ -15,32 +15,31 @@ function searchSubject(userid, subject, callback) {
         var sqlquery = connection.query(query, function (err, results) {
               if(err) {
                 console.log(err);
-                callback(false, {"error" : "could not get notes"});
+                callback(err);
               } else {
                 var response = parser.consolidate(results);
-                callback(true, response);
+                callback(null, response);
               }
               connection.destroy();
         });
         console.log(sqlquery.sql);
 }
 
-function searchCron(userid, cron, callback) {
-        console.log("Searching "+userid+"'s notes for cron "+cron);
+function searchCron(cron, callback) {
         var connection = mysql.createConnection({
           host : CONFIG.db.host,
           database : CONFIG.db.database,
           user : CONFIG.db.user,
           password : CONFIG.db.password,
         });
-        var query = "SELECT * FROM notes WHERE `cron` REGEXP '"+cron+"' ORDER BY `note_id`, `creation_epoch`";
+        var query = "SELECT * FROM notes WHERE `exec_cron` REGEXP '"+cron+"' ORDER BY `note_id`, `creation_epoch`";
         var sqlquery = connection.query(query, function (err, results) {
               if(err) {
                 console.log(err);
-                callback(false, {"error" : "could not get notes"});
+                callback(err, null);
               } else {
                 var response = parser.consolidate(results);
-                callback(true, response);
+                callback(null, response);
               }
               connection.destroy();
         });
