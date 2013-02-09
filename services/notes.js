@@ -60,10 +60,10 @@ function get(userid, noteid, callback) {
         var sqlquery = connection.query(query, function (err, results) {
               if(err) {
                 console.log(err);
-                callback(false, {"error" : "could not get notes"});
+                callback({"error" : "could not get notes"}, null);
               } else {
                 var response = parser.consolidate(results);
-                callback(true, response);
+                callback(null, response);
               }
               connection.destroy();
         });
@@ -116,9 +116,9 @@ function create(userid, note, callback) {
         var sqlquery = connection.query("INSERT INTO notes SET ?", values, function (err, result) {
               if(err) {
                 console.log(err);
-                callback(false, {"error" : "could not add note"});
+                callback({"error" : "could not add note"}, null);
               } else {
-                callback(true, hash);
+                callback(null, hash);
               }
               connection.destroy();
         });
@@ -136,9 +136,9 @@ function remove(userid, noteid, callback) {
         var sqlquery = connection.query("DELETE FROM notes WHERE `note_id`="+connection.escape(noteid)+" and `user`="+connection.escape(userid), function (err, result) {
               if(err) {
                 console.log(err);
-                callback(false, {"error" : "could not remove note"});
+                callback({"error" : "could not remove note"}, null);
               } else {
-                callback(true, "done");
+                callback(null, "done");
               }
               connection.destroy();
         });
