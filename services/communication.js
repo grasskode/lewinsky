@@ -19,6 +19,17 @@ var Communication = function(){
 			ref.send(to, noteSubject);
 		});
 	};
+	
+	this.fetchNote = function(noteSubject, callback){
+		notes.getBySubject(noteSubject, function(err, data){
+			if(!err){
+				var note = data;
+				callback(null, note);
+			}else{
+				callback(err);
+			}
+		});
+	};
 };
 
 module.exports = new Communication();

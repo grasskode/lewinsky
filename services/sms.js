@@ -3,14 +3,32 @@ var schedule = require('node-schedule');
 var logger = require(LIB_DIR + 'log_factory').create("sms");
 var Communication = require('./communication');
 
+var Twilio = require('twilio-js');
+Twilio.AccountSid = TWILIO_ACC_ID;
+Twilio.AuthToken  = TWILIO_AUTH_TOKEN;
+
 var SMS = comb.define(Communication,{
 	instance : {
 		send : function(to, noteSubject){
-			Twilio.SMS.create({to: "+919945657973", from: "+12243658564", url: "http://4um7.localtunnel.com/sms", body : "Heeloo"}, function(err,res) {
-				if(err){
-					console.log(err);
-				}else
-					console.log('You have a new message!');
+			this.fetchNote(noteSubject, function(err, note){
+				if(!err){
+					var to = note.recepient_number;
+					var text = note.body;
+					Twilio.SMS.create({
+						to: to, 
+						from: TWILIO_NUMBER, 
+						url: TWILIO_SMS_CALLBACK, 
+						body : text
+					}, 
+					function(err,res) {
+						if(err){
+							logger.error(err);
+						}else
+							logger.info('You have a new message!');
+					});
+				}else{
+					logger.error(err);
+				}
 			});
 		}
 	}
