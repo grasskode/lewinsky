@@ -9,11 +9,18 @@ Twilio.AuthToken  = TWILIO_AUTH_TOKEN;
 
 var SMS = comb.define(Communication,{
 	instance : {
-		send : function(to, noteSubject){
-			this.fetchNote(noteSubject, function(err, note){
+		constructor : function(options){
+			options = options || {};
+			this._super(arguments);
+		},
+		
+		send : function(userId, noteSubject){
+			var ref = this;
+			this.fetchNote(userId, noteSubject, function(err, note){
 				if(!err){
-					var to = note.recepient_number;
-					var text = note.body;
+					var to = ref.getNumbers(note);
+					var text = ref.getBody(note);
+					
 					Twilio.SMS.create({
 						to: to, 
 						from: TWILIO_NUMBER, 

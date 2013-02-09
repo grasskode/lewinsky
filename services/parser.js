@@ -14,6 +14,8 @@ function consolidate(entries) {
     note[entry.note_id]['creation_epoch'][entry.creation_epoch] = {};
     note[entry.note_id]['creation_epoch'][entry.creation_epoch]['body'] = entry.body;
     note[entry.note_id]['creation_epoch'][entry.creation_epoch]['cron'] = entry.exec_cron;
+    note[entry.note_id]['creation_epoch'][entry.creation_epoch]['receipent_mail'] = entry.receipent_mail;
+    note[entry.note_id]['creation_epoch'][entry.creation_epoch]['receipent_ph_num'] = entry.receipent_ph_num;
   });
   return note;
 }

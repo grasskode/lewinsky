@@ -9,12 +9,25 @@ Twilio.AuthToken  = TWILIO_AUTH_TOKEN;
 
 var Call = comb.define(Communication,{
 	instance : {
-		send : function(to, noteSubject){
-			Twilio.Call.create({to: to, from: TWILIO_NUMBER, url: TWILIO_CALL_CALLBACK + "?sub=" + noteSubject}, function(err,res) {
-				if(err){
+		constructor : function(options){
+			options = options || {};
+			this._super(arguments);
+		},
+		
+		send : function(userId, noteSubject){
+			var ref = this;
+			this.fetchNote(userId, noteSubject, function(err, note){
+				if(!err){
+					var to = ref.getNumbers(note);
+					Twilio.Call.create({to: to, from: TWILIO_NUMBER, url: TWILIO_CALL_CALLBACK + "?sub=" + noteSubject}, function(err,res) {
+						if(err){
+							logger.error(err);
+						}else
+							logger.info('HOLY MOLY! PHONES ARE RINGING');
+					});
+				}else{
 					logger.error(err);
-				}else
-					logger.info('HOLY MOLY! PHONES ARE RINGING');
+				}
 			});
 		}
 	}
