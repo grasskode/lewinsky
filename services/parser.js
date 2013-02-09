@@ -64,7 +64,10 @@ function parse(text) {
   while(token) {
     var info = tl.extract(token);
     if(info) {
-      parsed[info['token']] = info['info'];
+      if(!parsed[info['token']])
+        parsed[info['token']] = new Array();
+      if(parsed[info['token']].indexOf(info['info']) < 0)
+        parsed[info['token']].push(info['info']);
       token = t.remove();
     } else {
       token = t.next();
@@ -76,3 +79,5 @@ function parse(text) {
 
 exports.consolidate = consolidate;
 exports.parse = parse;
+
+console.log(parse("Hello @datehello @tohello @datehell o how low!"));

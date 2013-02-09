@@ -1,7 +1,8 @@
 var fs = require("fs");
 var crypto = require('crypto');
 var mysql = require("mysql");
-var parser = require("./note-parser");
+var parser = require("./parser");
+var scheduler = require("./scheduler");
 
 function searchSubject(userid, subject, callback) {
         console.log("Searching "+userid+"'s notes for subject "+subject);
@@ -104,7 +105,14 @@ function create(userid, note, callback) {
           password : CONFIG.db.password,
         });
         var hash = crypto.createHash('md5').update(note.subject).digest("hex");
-        var values = {note_id : hash, user : userid, subject : note.subject, body : note.body, creation_epoch : new Date().getTime()};
+        var values = {note_id : hash, 
+                      user : userid, 
+                      subject : note.subject, 
+                      body : note.body, 
+                      creation_epoch : new Date().getTime(),
+                      exec_cron : scheduler.createCron(note.date, note.repeat),
+                      receipents : note.receipents,
+                      actions : note.actions};
         var sqlquery = connection.query("INSERT INTO notes SET ?", values, function (err, result) {
               if(err) {
                 console.log(err);

@@ -1,0 +1,8 @@
+{
+  "subject" : "kill the neighbor's dog",
+  "body" : "kill that barking bastard",
+  "receipents" : "one@one.com, +121234567890",
+  "date" : "12/12/12-13:10",
+  "repeat" : "weekly",
+  "actions" : "mail, msg"
+}
