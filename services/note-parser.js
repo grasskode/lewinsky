@@ -18,4 +18,61 @@ function consolidate(entries) {
   return note;
 }
 
+function tokenizer(text) {
+  this.parsed = new Array();
+  this.tokens = text.split(/\b\s+/);
+  
+  this.next = function() {
+    this.parsed.push(this.tokens[0]);
+    this.tokens.shift();
+    return this.tokens[0];
+  };
+
+  this.remove = function() {
+    this.tokens.shift();
+    return this.tokens[0];
+  };
+
+  this.result = function(){
+    return this.parsed.join(" ");
+  }
+
+}
+
+function tokenList() {
+  this.list = ["@date", "@repeat", "@to"];
+  
+  this.extract = function(token) {
+    for(var index in this.list ) {
+      var entry = this.list[index];
+      if(token.indexOf(entry) == 0){
+        var info = {};
+        info['token'] = entry;
+        info['info'] = token.substr(entry.length);
+        return info;
+      }
+    }
+  };
+
+}
+
+function parse(text) {
+  var parsed = {};
+  var t = new tokenizer(text);
+  var tl = new tokenList();
+  var token = t.next();
+  while(token) {
+    var info = tl.extract(token);
+    if(info) {
+      parsed[info['token']] = info['info'];
+      token = t.remove();
+    } else {
+      token = t.next();
+    }
+  }
+  parsed['@body'] = t.result();
+  return parsed;
+}
+
 exports.consolidate = consolidate;
+exports.parse = parse;
