@@ -21,6 +21,7 @@
     "vows" : "*",
     "twilio-js" : "*",
     "sendgrid" : "*",
-    "node-schedule" : "*"
+    "node-schedule" : "*",
+    "moment" : "*"
   }
 }

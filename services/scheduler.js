@@ -4,17 +4,49 @@ var Call = require('./call');
 var SMS = require('./sms');
 var Email = require('./email');
 var notesImpl = require('./notes');
+var moment = require("moment");
 
 var Scheduler = function(){
-	this.createCron = function(date, repeat) {
-		var d = new Date(date);
-		var year = d.getFullYear();
-		var month = d.getMonth() + 1;
-		var day = d.getDate();
-		var hour = d.getHour();
-		var minute = d.getMinute();
+	this.createCron = function(datestr, repeat) {
+		var d = moment(datestr);
+		var year = d.year();
+		var month = d.month() + 1;
+    var day = "*";
+		var date = d.date();
+		var hour = d.hour();
+		var minute = d.minute();
+
+    if(repeat == "yearly")
+      year = "*";
+    else if(repeat == "monthly"){
+      year = "*";
+      month = "*";
+    }
+    else if(repeat == "weekly"){
+      year = "*";
+      month = "*";
+      day = d.day();
+    }
+    else if(repeat == "daily"){
+      year = "*";
+      month = "*";
+      date = "*";
+    }
+    else if(repeat == "hourly"){
+      year = "*";
+      month = "*";
+      date = "*";
+      hour = "*";
+    }
+    else if(repeat == "minutely"){
+      year = "*";
+      month = "*";
+      date = "*";
+      hour = "*";
+      minute = "*";
+    }
 		
-		return minute + " " + hour + " " + day + " " + month + " * " + year;
+		return minute + " " + hour + " " + day + " " + month + " " + day + " " + year;
 	};
 
 	/**
