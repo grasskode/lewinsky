@@ -39,9 +39,10 @@ var Scheduler = function(){
 					notes = data;
 					logger.info(Object.keys(notes).length + " notes found for scheduling");
 					_.each(notes, function(note){
+						console.log(note);
 						var userId = note.user;
 						var subject = note.subject;
-						var actions = entry.actions;
+						var actions = note.actions;
 						
 						var noteMap = note.creation_epoch;
 						_.each(noteMap, function(entry){

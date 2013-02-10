@@ -13,7 +13,8 @@ var CallRoute = function(app){
 		var subject = req.query['subject'];
 		
 		if(user && subject){
-			var comm = Communication;
+			var comm = new Communication();
+			
 			comm.fetchNote(user, subject, function(err, notes){
 				if(!err){
 					_.each(notes, function(note){

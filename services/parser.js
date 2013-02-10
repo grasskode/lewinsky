@@ -1,12 +1,12 @@
 function is_mail(element, index, array){
-  return element.match(/^(\w\.)*\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/);
+  return element.match(/^(\w|\.)*@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/);
 }
 
 function is_ph_num(element, index, array) {
   return element.match(/^\+(\d)+$/);
 }
 
-//console.log(is_mail("abc@abc.com"));
+console.log(is_mail("iitr.sourabh@abc.com"));
 //console.log(is_ph_num("+1231234567890"));
 //console.log(is_ph_num("abc@abc.com"));
 //console.log(is_mail("+1231234567890"));
