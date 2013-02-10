@@ -17,11 +17,13 @@ var Call = comb.define({
 		},
 		
 		send : function(to, noteSubject, userId, text){
-			Twilio.Call.create({to: to, from: TWILIO_NUMBER, url: TWILIO_CALL_CALLBACK + "?user=" + userId + "&subject=" + encodeURIComponent(noteSubject)}, function(err,res) {
-				if(err){
-					logger.error(err);
-				}else
-					logger.info('HOLY MOLY! PHONES ARE RINGING');
+			_.each(to, function(num){
+				Twilio.Call.create({to: num, from: TWILIO_NUMBER, url: TWILIO_CALL_CALLBACK + "?user=" + userId + "&subject=" + encodeURIComponent(noteSubject)}, function(err,res) {
+					if(err){
+						logger.error(err);
+					}else
+						logger.info('HOLY MOLY! PHONES ARE RINGING');
+				});
 			});
 		}
 	}

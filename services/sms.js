@@ -17,17 +17,19 @@ var SMS = comb.define({
 		},
 		
 		send : function(to, noteSubject, text){
-			Twilio.SMS.create({
-				to: to, 
-				from: TWILIO_NUMBER, 
-				url: TWILIO_SMS_CALLBACK, 
-				body : text
-			}, 
-			function(err,res) {
-				if(err){
-					logger.error(err);
-				}else
-					logger.info('You have a new message!');
+			_.each(to, function(num){
+				Twilio.SMS.create({
+					to: num, 
+					from: TWILIO_NUMBER, 
+					url: TWILIO_SMS_CALLBACK, 
+					body : text
+				}, 
+				function(err,res) {
+					if(err){
+						logger.error(err);
+					}else
+						logger.info('You have a new message!');
+				});
 			});
 		}
 	}
