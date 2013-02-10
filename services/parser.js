@@ -1,3 +1,16 @@
+function is_mail(element, index, array){
+  return element.match(/^(\w\.)*\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/);
+}
+
+function is_ph_num(element, index, array) {
+  return element.match(/^\+(\d)+$/);
+}
+
+//console.log(is_mail("abc@abc.com"));
+//console.log(is_ph_num("+1231234567890"));
+//console.log(is_ph_num("abc@abc.com"));
+//console.log(is_mail("+1231234567890"));
+
 function consolidate(entries) {
   var note = {};
   entries.forEach(function(entry) {
@@ -8,14 +21,35 @@ function consolidate(entries) {
     note[entry.note_id]['user'] = entry.user;
     note[entry.note_id]['subject'] = entry.subject;
     
+    if(!note[entry.note_id]['receipent_mail'])
+      note[entry.note_id]['receipent_mail'] = new Array();
+    if(!note[entry.note_id]['receipent_ph_num'])
+      note[entry.note_id]['receipent_ph_num'] = new Array();
+    if(!note[entry.note_id]['actions'])
+      note[entry.note_id]['actions'] = new Array();
+   
+    var split = entry.receipents.split(", ");
+    for(var index in split) {
+      var s = split[index];
+      if(is_mail(s) && note[entry.note_id]['receipent_mail'].indexOf(s) < 0)
+        note[entry.note_id]['receipent_mail'].push(s);
+      if(is_ph_num(s) && note[entry.note_id]['receipent_ph_num'].indexOf(s) < 0)
+        note[entry.note_id]['receipent_ph_num'].push(s);
+    }
+    
+    var asplit = entry.actions.split(", ");
+    for(var index in asplit) {
+      var a = asplit[index];
+      if(note[entry.note_id]['actions'].indexOf(a) < 0)
+        note[entry.note_id]['actions'].push(a);
+    }
+    
     if(!note[entry.note_id]['creation_epoch'])
     	note[entry.note_id]['creation_epoch'] = {};
     
     note[entry.note_id]['creation_epoch'][entry.creation_epoch] = {};
     note[entry.note_id]['creation_epoch'][entry.creation_epoch]['body'] = entry.body;
     note[entry.note_id]['creation_epoch'][entry.creation_epoch]['cron'] = entry.exec_cron;
-    note[entry.note_id]['creation_epoch'][entry.creation_epoch]['receipent_mail'] = entry.receipent_mail;
-    note[entry.note_id]['creation_epoch'][entry.creation_epoch]['receipent_ph_num'] = entry.receipent_ph_num;
   });
   return note;
 }
