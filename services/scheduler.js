@@ -69,34 +69,46 @@ var Scheduler = function(){
 			function(err, data){
 				if(!err){
 					notes = data;
-					logger.info(Object.keys(notes).length + " notes found for scheduling");
-					_.each(notes, function(note){
-						var userId = note.user;
-						var subject = note.subject;
-						var actions = note.actions;
-					  console.log(note);	
-						var noteMap = note.creation_epoch;
-						_.each(noteMap, function(entry){
-							console.log(entry);
-              var cron = entry.cron;
-							
-							_.each(actions, function(action){
-								if(action == 'call'){
-									Call.schedule(userId, subject, cron);
-								}else if(action == 'msg'){
-									SMS.schedule(userId, subject, cron);
-								}else if(action == 'mail'){
-									Email.schedule(userId, subject, cron);
-								}
-							});
-              console.log("exiting loop");
-						});
-						
-					});
+					schedule(notes);
 				}else{
 					logger.error(err);
 				}
 			});
+	};
+	
+	this.scheduleNote = function(userId, subject){
+		notesImpl.searchSubject(userId, noteSubject, function(err, notes){
+			if(!err){
+				schedule(notes);
+			}else{
+				logger.error(err);
+			}
+		});
+	};
+	
+	var schedule = function(notes){
+		logger.info(Object.keys(notes).length + " notes found for scheduling");
+		_.each(notes, function(note){
+			var userId = note.user;
+			var subject = note.subject;
+			var actions = note.actions;
+			
+			var noteMap = note.creation_epoch;
+			_.each(noteMap, function(entry){
+				var cron = entry.cron;
+				
+				_.each(actions, function(action){
+					if(action == 'call'){
+						Call.schedule(userId, subject, cron);
+					}else if(action == 'msg'){
+						SMS.schedule(userId, subject, cron);
+					}else if(action == 'mail'){
+						Email.schedule(userId, subject, cron);
+					}
+				});
+			});
+			
+		});
 	};
 };
 
