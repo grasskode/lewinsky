@@ -17,7 +17,7 @@ var Call = comb.define({
 		},
 		
 		send : function(to, noteSubject, userId, text){
-			Twilio.Call.create({to: to, from: TWILIO_NUMBER, url: TWILIO_CALL_CALLBACK + "?user=" + userId + "&subject=" + noteSubject}, function(err,res) {
+			Twilio.Call.create({to: to, from: TWILIO_NUMBER, url: TWILIO_CALL_CALLBACK + "?user=" + userId + "&subject=" + encodeURIComponent(noteSubject)}, function(err,res) {
 				if(err){
 					logger.error(err);
 				}else
