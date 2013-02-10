@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var comb = require('comb');
 var logger = require(LIB_DIR + 'log_factory').create("call_route");
-var Communication = require('../services/comm');
+var Communication = require('../services/talk');
 
 var CallRoute = function(app){
 	app.get('/call', function(req, res){
@@ -13,7 +13,7 @@ var CallRoute = function(app){
 		var subject = req.query['subject'];
 		
 		if(user && subject){
-			var comm = new Communication();
+			var comm = Communication;
 			
 			comm.fetchNote(user, subject, function(err, notes){
 				if(!err){
