@@ -51,7 +51,7 @@ var Scheduler = function(){
       }
     }
 		
-		return minute + " " + hour + " " + day + " " + month + " " + day + " " + year;
+		return minute + " " + hour + " " + date + " " + month + " " + day + " " + year;
 	};
 
 	/**
