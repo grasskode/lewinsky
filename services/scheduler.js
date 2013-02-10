@@ -74,22 +74,23 @@ var Scheduler = function(){
 						var userId = note.user;
 						var subject = note.subject;
 						var actions = note.actions;
-					  console.log(note);	
 						var noteMap = note.creation_epoch;
 						_.each(noteMap, function(entry){
 							console.log(entry);
               var cron = entry.cron;
 							
 							_.each(actions, function(action){
+                console.log("Scheduling "+action+" "+userId+" "+subject+" "+cron);
 								if(action == 'call'){
 									Call.schedule(userId, subject, cron);
 								}else if(action == 'msg'){
 									SMS.schedule(userId, subject, cron);
 								}else if(action == 'mail'){
 									Email.schedule(userId, subject, cron);
-								}
+								} else {
+                  console.log("Did not find "+action);
+                }
 							});
-              console.log("exiting loop");
 						});
 						
 					});

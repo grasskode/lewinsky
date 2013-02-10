@@ -26,7 +26,7 @@ var Email = comb.define(Communication, {
 			var date = new Date().getDate();
 			
 			var today = new Date(year + '-' + month + '-' + date + ' 00:00:00');
-			tommorrow = today.setDate(today.getDate() + 1);
+      tommorrow = today.setDate(today.getDate() + 1);
 			
 			if(next > (new Date())){
 				logger.debug("Next Trigger time  : " + next);
@@ -54,6 +54,7 @@ var Email = comb.define(Communication, {
 				var ref = this;
 				
 				schedule.scheduleJob(cron, function(){
+          console.log("debug");
 					logger.info('A communication with subject : ' + noteSubject + ' will be scheduled according to cron : ' + cron);
 					
 					ref.send(userId, noteSubject);

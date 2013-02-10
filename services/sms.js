@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var comb = require('comb');
 var schedule = require('node-schedule');
+var RecurrenceRule = schedule.RecurrenceRule;
 var logger = require(LIB_DIR + 'log_factory').create("sms");
 var Communication = require('./comm');
 
