@@ -41,20 +41,19 @@ var Scheduler = function(){
 					_.each(notes, function(note){
 						var userId = note.user;
 						var subject = note.subject;
+						var actions = entry.actions;
 						
 						var noteMap = note.creation_epoch;
 						_.each(noteMap, function(entry){
 							var cron = entry.cron;
 							
-							var actions = entry.actions;
-							actions = ['email'];
 							_.each(actions, function(action){
 								if(action == 'call'){
-									Call.scheduleRepeat(userId, subject, cron);
+									Call.schedule(userId, subject, cron);
 								}else if(action == 'sms'){
-									SMS.scheduleRepeat(userId, subject, cron);
+									SMS.schedule(userId, subject, cron);
 								}else if(action == 'email'){
-									Email.scheduleRepeat(userId, subject, cron);
+									Email.schedule(userId, subject, cron);
 								}
 							});
 						});

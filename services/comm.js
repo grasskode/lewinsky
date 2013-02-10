@@ -4,13 +4,8 @@ var RecurrenceRule = schedule.RecurrenceRule;
 var logger = require(LIB_DIR + 'log_factory').create("communication");
 var notesImpl = require('./notes');
 
-var Communication = comb.define(null,{
+var Communication = comb.define({
 	instance : {
-		constructor : function(options){
-			options = options || {};
-			this._super(arguments);
-		},
-		
 		isNextInvocationToday : function(cron, base){
 			logger.debug("Cron  : " + cron + ", Base : " + base);
 			var r = RecurrenceRule.fromCronString(cron);
@@ -29,23 +24,6 @@ var Communication = comb.define(null,{
 			}else{
 				return this.isNextInvocationToday(cron, next);
 			}
-		},
-		
-//		scheduleOnce : function(userId, noteSubject, date, to){
-//			var ref = this;
-//			schedule.scheduleJob(date, function(){
-//				logger.info('A communication to ' + to + ' will be scheduled at : ' + date);
-//				
-//				ref.send(to, noteSubject);
-//			});
-//		},
-		
-		getEmails : function(note){
-			return ['iitr.sourabh@gmail.com', 'sourabh@accredor.com'];
-		},
-		
-		getNumbers : function(note){
-			
 		},
 		
 		getBody : function(note){
@@ -73,6 +51,10 @@ var Communication = comb.define(null,{
 			}else{
 				logger.warn("Next invocation of cron : " + cron + " will not be today");
 			}
+		},
+		
+		schedule : function(userId, noteSubject, cron){
+			this.scheduleRepeat(userId, noteSubject, cron);
 		},
 		
 		fetchNote : function(userId, noteSubject, callback){

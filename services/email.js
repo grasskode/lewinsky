@@ -1,13 +1,15 @@
 var _ = require('underscore');
 var comb = require('comb');
 var schedule = require('node-schedule');
+var RecurrenceRule = schedule.RecurrenceRule;
+var notesImpl = require('./notes');
 var logger = require(LIB_DIR + 'log_factory').create("email");
-var Communication = require('./communication');
+var Communication = require('./comm');
 
 var SendGrid = require('sendgrid').SendGrid;
 var sendgrid = new SendGrid(SENDGRID_UID, SENDGRID_KEY);
 
-var Email = comb.define(Communication,{
+var Email = comb.define(Communication, {
 	instance : {
 		constructor : function(options){
 			options = options || {};
@@ -15,12 +17,11 @@ var Email = comb.define(Communication,{
 		},
 		
 		send : function(userId, noteSubject){
-			var ref = this;
 			this.fetchNote(userId, noteSubject, function(err, notes){
 				if(!err){
 					_.each(notes, function(note){
-						var to = ref.getEmails(note);
-						var text = ref.getBody(note);
+						var to = note.receipent_mail;
+						var text = this.getBody(note);
 						
 						sendgrid.send({
 							to: to,
