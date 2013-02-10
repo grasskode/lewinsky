@@ -64,7 +64,7 @@ var Scheduler = function(){
 		 */
 		var date = base ? base : new Date();
 		notesImpl.searchCron('^[-0-9,\*]* [-0-9,\*]* ' + 
-				'[-0-9,\*]*[[:<:]]' + date.getDate() + '[[:>:]][-0-9,\*]* [-0-9,\*]* [-0-9,\*]*' + 
+				'[-0-9,\*]*([[:<:]]' + date.getDate() + '[[:>:]])?[-0-9,\*]* [-0-9,\*]* [-0-9,\*]*' + 
 				'( [-0-9,\*]*[[:<:]]' + date.getFullYear() + '[[:>:]][-0-9,\*]*)?',
 			function(err, data){
 				if(!err){
@@ -74,20 +74,22 @@ var Scheduler = function(){
 						var userId = note.user;
 						var subject = note.subject;
 						var actions = note.actions;
-						
+					  console.log(note);	
 						var noteMap = note.creation_epoch;
 						_.each(noteMap, function(entry){
-							var cron = entry.cron;
+							console.log(entry);
+              var cron = entry.cron;
 							
 							_.each(actions, function(action){
 								if(action == 'call'){
 									Call.schedule(userId, subject, cron);
-								}else if(action == 'sms'){
+								}else if(action == 'msg'){
 									SMS.schedule(userId, subject, cron);
-								}else if(action == 'email'){
+								}else if(action == 'mail'){
 									Email.schedule(userId, subject, cron);
 								}
 							});
+              console.log("exiting loop");
 						});
 						
 					});
