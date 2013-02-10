@@ -43,7 +43,7 @@ var Call = comb.define(Communication, {
 			for (var key in entries) {
 				if (entries.hasOwnProperty(key)) {
 					var entry = entries[key];
-					body += entry.body;
+					body += entry.body + "\n";
 				}
 			}
 			
