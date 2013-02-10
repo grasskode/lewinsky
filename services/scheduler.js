@@ -8,6 +8,9 @@ var moment = require("moment");
 
 var Scheduler = function(){
 	this.createCron = function(datestr, repeat) {
+    if(!datestr)
+      return null;
+
 		var d = moment(datestr);
 		var year = d.year();
 		var month = d.month() + 1;
@@ -15,35 +18,37 @@ var Scheduler = function(){
 		var date = d.date();
 		var hour = d.hour();
 		var minute = d.minute();
-
-    if(repeat == "yearly")
-      year = "*";
-    else if(repeat == "monthly"){
-      year = "*";
-      month = "*";
-    }
-    else if(repeat == "weekly"){
-      year = "*";
-      month = "*";
-      day = d.day();
-    }
-    else if(repeat == "daily"){
-      year = "*";
-      month = "*";
-      date = "*";
-    }
-    else if(repeat == "hourly"){
-      year = "*";
-      month = "*";
-      date = "*";
-      hour = "*";
-    }
-    else if(repeat == "minutely"){
-      year = "*";
-      month = "*";
-      date = "*";
-      hour = "*";
-      minute = "*";
+    
+    if(repeat){
+      if(repeat == "yearly")
+        year = "*";
+      else if(repeat == "monthly"){
+        year = "*";
+        month = "*";
+      }
+      else if(repeat == "weekly"){
+        year = "*";
+        month = "*";
+        day = d.day();
+      }
+      else if(repeat == "daily"){
+        year = "*";
+        month = "*";
+        date = "*";
+      }
+      else if(repeat == "hourly"){
+        year = "*";
+        month = "*";
+        date = "*";
+        hour = "*";
+      }
+      else if(repeat == "minutely"){
+        year = "*";
+        month = "*";
+        date = "*";
+        hour = "*";
+        minute = "*";
+      }
     }
 		
 		return minute + " " + hour + " " + day + " " + month + " " + day + " " + year;
@@ -69,35 +74,52 @@ var Scheduler = function(){
 			function(err, data){
 				if(!err){
 					notes = data;
-					logger.info(Object.keys(notes).length + " notes found for scheduling");
-					_.each(notes, function(note){
-						var userId = note.user;
-						var subject = note.subject;
-						var actions = note.actions;
-						var noteMap = note.creation_epoch;
-						_.each(noteMap, function(entry){
-							console.log(entry);
-              var cron = entry.cron;
-							
-							_.each(actions, function(action){
-                console.log("Scheduling "+action+" "+userId+" "+subject+" "+cron);
-								if(action == 'call'){
-									Call.schedule(userId, subject, cron);
-								}else if(action == 'msg'){
-									SMS.schedule(userId, subject, cron);
-								}else if(action == 'mail'){
-									Email.schedule(userId, subject, cron);
-								} else {
-                  console.log("Did not find "+action);
-                }
-							});
-						});
-						
-					});
+					schedule(notes);
 				}else{
 					logger.error(err);
 				}
 			});
+	};
+	
+	this.scheduleNote = function(userId, subject){
+		notesImpl.searchSubject(userId, subject, function(err, notes){
+			if(!err){
+				schedule(notes);
+			}else{
+				logger.error(err);
+			}
+		});
+	};
+	
+	var schedule = function(notes){
+		logger.info(Object.keys(notes).length + " notes found for scheduling");
+		_.each(notes, function(note){
+			var userId = note.user;
+			var subject = note.subject;
+			var actions = note.actions;
+			
+			var noteMap = note.creation_epoch;
+			_.each(noteMap, function(entry){
+				var cron = entry.cron;
+				if(cron){
+          _.each(actions, function(action){
+            if(action.length > 0){
+              logger.debug("Trying to schedule "+action+" for "+userId+" ("+subject+") at "+cron);
+              if(action == 'call'){
+                Call.schedule(userId, subject, cron);
+              }else if(action == 'msg'){
+                SMS.schedule(userId, subject, cron);
+              }else if(action == 'mail'){
+                Email.schedule(userId, subject, cron);
+              } else {
+                logger.error(action+" not found.");
+              }
+            }
+          });
+        }
+			});
+			
+		});
 	};
 };
 

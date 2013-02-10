@@ -12,10 +12,10 @@ function to_note(subject, parsedText) {
   var note = {};
   note['subject'] = subject;
   note['body'] = parsedText['@body'];
-  note['receipents'] = parsedText['@to'].join(", ");
-  note['date'] = parsedText['@date'].join(", ");
-  note['repeat'] = parsedText['@repeat'].join(", ");
-  note['actions'] = parsedText['@action'].join(", ");
+  note['receipents'] = (parsedText['@to'])?parsedText['@to'].join(", "):"";
+  note['date'] = (parsedText['@date'])?parsedText['@date'].join(", "):"";
+  note['repeat'] = (parsedText['@repeat'])?parsedText['@repeat'].join(", "):"";
+  note['actions'] = (parsedText['@action'])?parsedText['@action'].join(", "):"";
   console.log(note);
   return note;
 }

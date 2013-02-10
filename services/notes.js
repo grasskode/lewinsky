@@ -105,12 +105,13 @@ function create(userid, note, callback) {
           password : CONFIG.db.password,
         });
         var hash = crypto.createHash('md5').update(note.subject).digest("hex");
+        var exec_cron = scheduler.createCron(note.date, note.repeat);
         var values = {note_id : hash, 
                       user : userid, 
                       subject : note.subject, 
                       body : note.body, 
                       creation_epoch : new Date().getTime(),
-                      exec_cron : scheduler.createCron(note.date, note.repeat),
+                      exec_cron : exec_cron,
                       receipents : note.receipents,
                       actions : note.actions};
         var sqlquery = connection.query("INSERT INTO notes SET ?", values, function (err, result) {
@@ -118,6 +119,8 @@ function create(userid, note, callback) {
                 console.log(err);
                 callback({"error" : "could not add note"}, null);
               } else {
+                if(exec_cron)
+                  scheduler.scheduleNote(userid, note.subject);
                 callback(null, hash);
               }
               connection.destroy();

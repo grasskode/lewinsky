@@ -51,10 +51,11 @@ var Email = comb.define(Communication, {
 		
 		scheduleRepeat : function(userId, noteSubject, cron){
 			if(this.isNextInvocationToday(cron)){
+        console.log("Next invocation today. Scheduling");
 				var ref = this;
 				
 				schedule.scheduleJob(cron, function(){
-          console.log("debug");
+          console.log("IN scheduleJob");
 					logger.info('A communication with subject : ' + noteSubject + ' will be scheduled according to cron : ' + cron);
 					
 					ref.send(userId, noteSubject);
@@ -86,7 +87,7 @@ var Email = comb.define(Communication, {
 					_.each(notes, function(note){
 						var to = note.receipent_mail;
 						var text = ref.getBody(note);
-						
+						logger.debug("Sending by sendgrid");
 						sendgrid.send({
 							to: to,
 							from: MASTER_EMAIL,

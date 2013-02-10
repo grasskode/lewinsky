@@ -1,9 +1,11 @@
+var logger = require(LIB_DIR + 'log_factory').create("sms");
 var _ = require('underscore');
 var comb = require('comb');
 var schedule = require('node-schedule');
 var RecurrenceRule = schedule.RecurrenceRule;
-var logger = require(LIB_DIR + 'log_factory').create("sms");
+var notesImpl = require('./notes');
 var Communication = require('./comm');
+
 
 var Twilio = require('twilio-js');
 Twilio.AccountSid = TWILIO_ACC_ID;

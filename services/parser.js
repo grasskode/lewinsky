@@ -56,13 +56,17 @@ function consolidate(entries) {
 
 function tokenizer(text) {
   this.parsed = new Array();
-  this.tokens = text.split(/\b\s+/);
+  this.tokens = text.split(/\s+/);
   
   this.next = function() {
     this.parsed.push(this.tokens[0]);
     this.tokens.shift();
     return this.tokens[0];
   };
+
+  this.head = function() {
+    return this.tokens[0];
+  }
 
   this.remove = function() {
     this.tokens.shift();
@@ -96,7 +100,7 @@ function parse(text) {
   var parsed = {};
   var t = new tokenizer(text);
   var tl = new tokenList();
-  var token = t.next();
+  var token = t.head();
   while(token) {
     var info = tl.extract(token);
     if(info) {
@@ -115,3 +119,5 @@ function parse(text) {
 
 exports.consolidate = consolidate;
 exports.parse = parse;
+
+console.log(parse("@toiitr.sourabh@gmail.com"));
