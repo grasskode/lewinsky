@@ -2,9 +2,12 @@ var fs = require("fs");
 var crypto = require('crypto');
 var mysql = require("mysql");
 var parser = require("./parser");
-var scheduler = require("./scheduler");
+var moment = require("moment");
 
-function searchSubject(userid, subject, callback) {
+var eventEmitter = require('../lib/emitter');
+//var scheduler = require("./scheduler");
+
+var searchSubject = function(userid, subject, callback) {
         console.log("Searching "+userid+"'s notes for subject "+subject);
         var connection = mysql.createConnection({
           host : CONFIG.db.host,
@@ -24,9 +27,9 @@ function searchSubject(userid, subject, callback) {
               connection.destroy();
         });
         console.log(sqlquery.sql);
-}
+};
 
-function searchCron(cron, callback) {
+var searchCron = function(cron, callback) {
         var connection = mysql.createConnection({
           host : CONFIG.db.host,
           database : CONFIG.db.database,
@@ -45,9 +48,9 @@ function searchCron(cron, callback) {
               connection.destroy();
         });
         console.log(sqlquery.sql);
-}
+};
 
-function get(userid, noteid, callback) {
+var get = function(userid, noteid, callback) {
         console.log("Getting "+noteid+" for "+userid);
         
         var connection = mysql.createConnection({
@@ -68,7 +71,7 @@ function get(userid, noteid, callback) {
               connection.destroy();
         });
         console.log(sqlquery.sql);
-}
+};
 
 /*function get(userid, count, from, callback) {
         if(!count)
@@ -96,7 +99,54 @@ function get(userid, noteid, callback) {
         console.log(sqlquery.sql);
 }*/
 
-function create(userid, note, callback) {
+var createCron = function(datestr, repeat) {
+    if(!datestr)
+      return null;
+
+		var d = moment(datestr);
+		var year = d.year();
+		var month = d.month() + 1;
+    var day = "*";
+		var date = d.date();
+		var hour = d.hour();
+		var minute = d.minute();
+    
+    if(repeat){
+      if(repeat == "yearly")
+        year = "*";
+      else if(repeat == "monthly"){
+        year = "*";
+        month = "*";
+      }
+      else if(repeat == "weekly"){
+        year = "*";
+        month = "*";
+        day = d.day();
+      }
+      else if(repeat == "daily"){
+        year = "*";
+        month = "*";
+        date = "*";
+      }
+      else if(repeat == "hourly"){
+        year = "*";
+        month = "*";
+        date = "*";
+        hour = "*";
+      }
+      else if(repeat == "minutely"){
+        year = "*";
+        month = "*";
+        date = "*";
+        hour = "*";
+        minute = "*";
+      }
+    }
+	
+	return minute + " " + hour + " " + date + " " + month + " " + day + " " + year;
+};
+
+var create = function(userid, note, callback) {
         console.log("Creating a new note for "+userid);
         var connection = mysql.createConnection({
           host : CONFIG.db.host,
@@ -105,7 +155,7 @@ function create(userid, note, callback) {
           password : CONFIG.db.password,
         });
         var hash = crypto.createHash('md5').update(note.subject).digest("hex");
-        var exec_cron = scheduler.createCron(note.date, note.repeat);
+        var exec_cron = createCron(note.date, note.repeat);
         var values = {note_id : hash, 
                       user : userid, 
                       subject : note.subject, 
@@ -119,16 +169,18 @@ function create(userid, note, callback) {
                 console.log(err);
                 callback({"error" : "could not add note"}, null);
               } else {
-                if(exec_cron)
-                  scheduler.scheduleNote(userid, note.subject);
+                if(exec_cron){
+                	eventEmitter.emit('schedule', userid, note.subject);
+                }
+//                  scheduler.scheduleNote(userid, note.subject);
                 callback(null, hash);
               }
               connection.destroy();
         });
         console.log(sqlquery.sql);
-}
+};
 
-function remove(userid, noteid, callback) {
+var remove = function(userid, noteid, callback) {
         console.log("Deleting "+noteid+" for "+userid);
         var connection = mysql.createConnection({
           host : CONFIG.db.host,
@@ -146,7 +198,7 @@ function remove(userid, noteid, callback) {
               connection.destroy();
         });
         console.log(sqlquery.sql);
-}
+};
 
 exports.get = get;
 exports.create = create;

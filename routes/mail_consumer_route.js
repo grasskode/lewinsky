@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var parser = require("../services/parser");
 var s_users = require("../services/users");
 var s_notes = require("../services/notes");
@@ -53,29 +54,32 @@ module.exports = function(app) {
 
     // This is the only info that we will use right now
     var user_email = req.body.from;
-    var subject = req.body.subject;
-    var text = req.body.text;
-    
-    var parsedText = parser.parse(text);
-    var note = to_note(subject, parsedText);
+    var matches = user_email.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+    _.each(matches, function(match){
+    	var subject = req.body.subject;
+        var text = req.body.text;
+        
+        var parsedText = parser.parse(text);
+        var note = to_note(subject, parsedText);
 
-    s_users.get(user_email, function(err, users) {
-      if(err){
-        respond(res, 500, err);
-      } else {
-        if(!users || !users[0])
-          respond(res, 500, {"error" : "no user found!"});
-        else {
-          var userid = users[0].id;
-          s_notes.create(userid, note, function(err, data) {
-            if(err)
-              respond(res, 500, err);
-            else
-              respond(res, 200, data);
-          });
-        }
-      }
+        s_users.get(match, function(err, users) {
+          if(err){
+            respond(res, 500, err);
+          } else {
+            if(!users || !users[0])
+              respond(res, 500, {"error" : "no user found!"});
+            else {
+              var userid = users[0].id;
+              s_notes.create(userid, note, function(err, data) {
+                if(err)
+                  respond(res, 500, err);
+                else
+                  respond(res, 200, data);
+              });
+            }
+          }
+        });
     });
   });
   
-}
+};
