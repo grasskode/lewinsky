@@ -119,5 +119,3 @@ function parse(text) {
 
 exports.consolidate = consolidate;
 exports.parse = parse;
-
-console.log(parse("@toiitr.sourabh@gmail.com"));

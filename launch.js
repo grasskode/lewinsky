@@ -44,4 +44,5 @@ for(var key in settings) {
  * Launch the application
  */
 console.log("Launching app...");
-require("./app");
+var app = require("./app");
+app.run(CONFIG.port);

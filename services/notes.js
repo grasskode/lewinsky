@@ -3,9 +3,7 @@ var crypto = require('crypto');
 var mysql = require("mysql");
 var parser = require("./parser");
 var moment = require("moment");
-
-var eventEmitter = require('../lib/emitter');
-//var scheduler = require("./scheduler");
+var eventEmitter = require('../utils/emitter');
 
 var searchSubject = function(userid, subject, callback) {
         console.log("Searching "+userid+"'s notes for subject "+subject);

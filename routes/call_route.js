@@ -1,6 +1,5 @@
 var _ = require('underscore');
-var comb = require('comb');
-var logger = require(LIB_DIR + 'log_factory').create("call_route");
+var logger = require('../utils/log_factory').create("call_route");
 var Communication = require('../services/talk');
 
 var CallRoute = function(app){

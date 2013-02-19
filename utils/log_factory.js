@@ -2,7 +2,6 @@
  * Configure Log4JS for logging
  */
 
-var CONFIG = require('config');
 var log4js = require('log4js');
 var _ = require('underscore');
 

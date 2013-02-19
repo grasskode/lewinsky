@@ -1,3 +1,4 @@
+/*
 var CONFIG = require('config');
 
 LIB_DIR = __dirname + '/';
@@ -12,3 +13,4 @@ SENDGRID_UID = 'guptakaran11';
 SENDGRID_KEY = 'mypapass';
 
 MASTER_EMAIL = 'note@mylewinsky.com';
+*/

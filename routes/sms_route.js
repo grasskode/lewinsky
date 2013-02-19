@@ -1,4 +1,4 @@
-var logger = require(LIB_DIR + 'log_factory').create("sms_route");
+var logger = require('../utils/log_factory').create("sms_route");
 
 var SMSRoute = function(app){
 	app.post('/sms', function(req, res){

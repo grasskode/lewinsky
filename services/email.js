@@ -3,10 +3,10 @@ var comb = require('comb');
 var schedule = require('node-schedule');
 var RecurrenceRule = schedule.RecurrenceRule;
 var notesImpl = require('./notes');
-var logger = require(LIB_DIR + 'log_factory').create("email");
-
+var logger = require('../utils/log_factory').create("email");
 var SendGrid = require('sendgrid').SendGrid;
-var sendgrid = new SendGrid(SENDGRID_UID, SENDGRID_KEY);
+
+var sendgrid = new SendGrid(CONFIG.sendgrid.uid, CONFIG.sendgrid.key);
 
 var Email = comb.define({
 	instance : {
@@ -18,7 +18,7 @@ var Email = comb.define({
 		send : function(to, noteSubject, text){
 			sendgrid.send({
 				to: to,
-				from: MASTER_EMAIL,
+				from: CONFIG.sendgrid.master_email,
 				subject: noteSubject,
 				text: text
 			}, function(success, message) {
