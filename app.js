@@ -38,7 +38,14 @@ app.configure(function(){
 /**
  * Routes
  */
-require('./routes')(app);
+//require('./routes')(app);
+
+app.get('/greet', function (req, res) {
+    res.status = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.write("Greetings!");
+    res.end();
+});
 
 
 /**
@@ -50,5 +57,5 @@ http.createServer(app).listen(app.get('port'), function(){
 
 logger.info("Started with settings : " + JSON.stringify(app.settings));
 
-var scheduler = require('./services/scheduler');
-scheduler.run();
+//var scheduler = require('./services/scheduler');
+//scheduler.run();

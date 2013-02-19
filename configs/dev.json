@@ -9,11 +9,11 @@
   "log" : {
     "appenders": [
       {"type" : "console"},
-      { 
+        { 
             "type": "file", 
             "filename": "logs/dev_web.log",
-        "maxLogSize": 1024,
-        "level": "WARN",
+            "maxLogSize": 1024,
+            "level": "WARN",
             "backups": 3
         }
     ]
