@@ -3,10 +3,11 @@ var crypto = require('crypto');
 var mysql = require("mysql");
 var parser = require("./parser");
 var moment = require("moment");
-var eventEmitter = require('../utils/emitter');
+//var eventEmitter = require('../utils/emitter');
+var logger = require("../utils/log_factory").create("notes");
 
 var searchSubject = function(userid, subject, callback) {
-        console.log("Searching "+userid+"'s notes for subject "+subject);
+        logger.info("Searching "+userid+"'s notes for subject "+subject);
         var connection = mysql.createConnection({
           host : CONFIG.db.host,
           database : CONFIG.db.database,
@@ -16,7 +17,7 @@ var searchSubject = function(userid, subject, callback) {
         var query = "SELECT * FROM notes WHERE `user`="+connection.escape(userid)+" and `subject`="+connection.escape(subject)+" ORDER BY `note_id`, `creation_epoch`";
         var sqlquery = connection.query(query, function (err, results) {
               if(err) {
-                console.log(err);
+                logger.error(err);
                 callback(err);
               } else {
                 var response = parser.consolidate(results);
@@ -24,7 +25,7 @@ var searchSubject = function(userid, subject, callback) {
               }
               connection.destroy();
         });
-        console.log(sqlquery.sql);
+        // console.log(sqlquery.sql);
 };
 
 var searchCron = function(cron, callback) {
@@ -37,7 +38,7 @@ var searchCron = function(cron, callback) {
         var query = "SELECT * FROM notes WHERE `exec_cron` REGEXP '"+cron+"' ORDER BY `note_id`, `creation_epoch`";
         var sqlquery = connection.query(query, function (err, results) {
               if(err) {
-                console.log(err);
+                logger.error(err);
                 callback(err, null);
               } else {
                 var response = parser.consolidate(results);
@@ -45,11 +46,11 @@ var searchCron = function(cron, callback) {
               }
               connection.destroy();
         });
-        console.log(sqlquery.sql);
+        // console.log(sqlquery.sql);
 };
 
 var get = function(userid, noteid, callback) {
-        console.log("Getting "+noteid+" for "+userid);
+        logger.info("Getting "+noteid+" for "+userid);
         
         var connection = mysql.createConnection({
           host : CONFIG.db.host,
@@ -60,7 +61,7 @@ var get = function(userid, noteid, callback) {
         var query = "SELECT * FROM notes WHERE `user`="+connection.escape(userid)+" and `note_id`="+connection.escape(noteid)+" ORDER BY `note_id`, `creation_epoch`";
         var sqlquery = connection.query(query, function (err, results) {
               if(err) {
-                console.log(err);
+                logger.error(err);
                 callback({"error" : "could not get notes"}, null);
               } else {
                 var response = parser.consolidate(results);
@@ -68,7 +69,7 @@ var get = function(userid, noteid, callback) {
               }
               connection.destroy();
         });
-        console.log(sqlquery.sql);
+        // console.log(sqlquery.sql);
 };
 
 /*function get(userid, count, from, callback) {
@@ -97,6 +98,9 @@ var get = function(userid, noteid, callback) {
         console.log(sqlquery.sql);
 }*/
 
+/**
+ * Utility function to create a cron out of the date string and the repeat pattern
+ */
 var createCron = function(datestr, repeat) {
     if(!datestr)
       return null;
@@ -144,8 +148,11 @@ var createCron = function(datestr, repeat) {
 	return minute + " " + hour + " " + date + " " + month + " " + day + " " + year;
 };
 
+/**
+ * Create a new note for the given userid
+ */
 var create = function(userid, note, callback) {
-        console.log("Creating a new note for "+userid);
+        logger.info("Creating a new note for "+userid);
         var connection = mysql.createConnection({
           host : CONFIG.db.host,
           database : CONFIG.db.database,
@@ -164,22 +171,21 @@ var create = function(userid, note, callback) {
                       actions : note.actions};
         var sqlquery = connection.query("INSERT INTO notes SET ?", values, function (err, result) {
               if(err) {
-                console.log(err);
+                logger.error(err);
                 callback({"error" : "could not add note"}, null);
               } else {
-                if(exec_cron){
-                	eventEmitter.emit('schedule', userid, note.subject);
-                }
-//                  scheduler.scheduleNote(userid, note.subject);
+                //if(exec_cron){
+                //  eventEmitter.emit('schedule', userid, note.subject);
+                //}
                 callback(null, hash);
               }
               connection.destroy();
         });
-        console.log(sqlquery.sql);
+        // console.log(sqlquery.sql);
 };
 
 var remove = function(userid, noteid, callback) {
-        console.log("Deleting "+noteid+" for "+userid);
+        logger.info("Deleting "+noteid+" for "+userid);
         var connection = mysql.createConnection({
           host : CONFIG.db.host,
           database : CONFIG.db.database,
@@ -188,14 +194,14 @@ var remove = function(userid, noteid, callback) {
         });
         var sqlquery = connection.query("DELETE FROM notes WHERE `note_id`="+connection.escape(noteid)+" and `user`="+connection.escape(userid), function (err, result) {
               if(err) {
-                console.log(err);
+                logger.error(err);
                 callback({"error" : "could not remove note"}, null);
               } else {
                 callback(null, "done");
               }
               connection.destroy();
         });
-        console.log(sqlquery.sql);
+        // console.log(sqlquery.sql);
 };
 
 exports.get = get;

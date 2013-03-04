@@ -12,6 +12,9 @@ console.log("Configuring environment variables.");
 if(! process.env.NODE_ENV) {
   var env = process.argv[2];
   if(! _.contains(["dev", "prod", "test"], env) ) {
+      env = settings.env;
+  }
+  if(! _.contains(["dev", "prod", "test"], env) ) {
           env = "dev";
   }
   process.env.NODE_ENV = env;
@@ -39,6 +42,7 @@ for(var key in settings) {
     CONFIG[key] = settings[key];
   }
 }
+CONFIG["env"] = env;
 
 /*
  * Launch the application

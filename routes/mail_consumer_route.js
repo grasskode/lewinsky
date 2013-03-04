@@ -1,14 +1,20 @@
 var _ = require('underscore');
-var parser = require("../services/parser");
-var s_users = require("../services/users");
+var s_parser = require("../services/parser");
 var s_notes = require("../services/notes");
+var logger = require("../utils/log_factory").create("mail_consumer");
 
+/**
+ * Utility method to send a plain text http response with given code and message
+ */
 function respond(res, code, message) {
         res.status(code);
         res.set('Content-Type', 'text/plain');
         res.send(message);
 }
 
+/**
+ * Utility function to create a note with given subject out of the given parsed text.
+ */
 function to_note(subject, parsedText) {
   var note = {};
   note['subject'] = subject;
@@ -17,15 +23,15 @@ function to_note(subject, parsedText) {
   note['date'] = (parsedText['@date'])?parsedText['@date'].join(", "):"";
   note['repeat'] = (parsedText['@repeat'])?parsedText['@repeat'].join(", "):"";
   note['actions'] = (parsedText['@action'])?parsedText['@action'].join(", "):"";
-  console.log(note);
+  logger.debug(note);
   return note;
 }
 
 module.exports = function(app) {
   
   app.post("/consume", function(req, res) {
-    console.log("Consuming mail :");
-    console.log(req.body);
+    logger.info("Consuming mail :");
+    logger.info(req.body);
 
     /********************************************
      * expected POST
@@ -52,33 +58,21 @@ module.exports = function(app) {
      **********************************************
      */
 
-    // This is the only info that we will use right now
     var user_email = req.body.from;
     var matches = user_email.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
-    _.each(matches, function(match){
-    	var subject = req.body.subject;
-        var text = req.body.text;
+    // ASSUMPTION : There cannot be more than one "from"
+    var userid = matches[0];
+    var subject = req.body.subject;
+    var text = req.body.text;
         
-        var parsedText = parser.parse(text);
-        var note = to_note(subject, parsedText);
+    var parsedText = s_parser.parse(text);
+    var note = to_note(subject, parsedText);
 
-        s_users.get(match, function(err, users) {
-          if(err){
+    s_notes.create(userid, note, function(err, data) {
+        if(err)
             respond(res, 500, err);
-          } else {
-            if(!users || !users[0])
-              respond(res, 500, {"error" : "no user found!"});
-            else {
-              var userid = users[0].id;
-              s_notes.create(userid, note, function(err, data) {
-                if(err)
-                  respond(res, 500, err);
-                else
-                  respond(res, 200, data);
-              });
-            }
-          }
-        });
+        else
+            respond(res, 200, data);
     });
   });
   
