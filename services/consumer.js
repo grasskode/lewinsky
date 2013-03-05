@@ -1,5 +1,5 @@
 var s_parser = require("./parser");
-var s_notes = require("./notes");
+var notes_dao = require("../dao/notes");
 var logger = require("../utils/log_factory").create("consumer");
 
 exports.consume = function(parsedMail, callback) {
@@ -38,7 +38,7 @@ exports.consume = function(parsedMail, callback) {
     var parsedText = s_parser.parse(text);
     var note = to_note(subject, parsedText);
 
-    s_notes.create(userid, note, function(err, data) {
+    notes_dao.create(userid, note, function(err, data) {
         if(err)
             callback(err, null);
         else

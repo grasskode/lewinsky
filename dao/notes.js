@@ -1,10 +1,14 @@
 var fs = require("fs");
 var crypto = require('crypto');
 var mysql = require("mysql");
-var parser = require("./parser");
 var moment = require("moment");
-//var eventEmitter = require('../utils/emitter');
 var logger = require("../utils/log_factory").create("notes");
+
+exports.get = get;
+exports.create = create;
+exports.remove = remove;
+exports.searchSubject = searchSubject;
+exports.searchCron = searchCron;
 
 var searchSubject = function(userid, subject, callback) {
         logger.info("Searching "+userid+"'s notes for subject "+subject);
@@ -105,13 +109,13 @@ var createCron = function(datestr, repeat) {
     if(!datestr)
       return null;
 
-		var d = moment(datestr);
-		var year = d.year();
-		var month = d.month() + 1;
+	var d = moment(datestr);
+	var year = d.year();
+	var month = d.month() + 1;
     var day = "*";
-		var date = d.date();
-		var hour = d.hour();
-		var minute = d.minute();
+	var date = d.date();
+	var hour = d.hour();
+	var minute = d.minute();
     
     if(repeat){
       if(repeat == "yearly")
@@ -174,9 +178,6 @@ var create = function(userid, note, callback) {
                 logger.error(err);
                 callback({"error" : "could not add note"}, null);
               } else {
-                //if(exec_cron){
-                //  eventEmitter.emit('schedule', userid, note.subject);
-                //}
                 callback(null, hash);
               }
               connection.destroy();
@@ -204,8 +205,45 @@ var remove = function(userid, noteid, callback) {
         // console.log(sqlquery.sql);
 };
 
-exports.get = get;
-exports.create = create;
-exports.remove = remove;
-exports.searchSubject = searchSubject;
-exports.searchCron = searchCron;
+function consolidate(entries) {
+  var note = {}; 
+  entries.forEach(function(entry) {
+    if(!note[entry.note_id])
+      note[entry.note_id] = {}; 
+    
+    note[entry.note_id]['note_id'] = entry.note_id;
+    note[entry.note_id]['user'] = entry.user;
+    note[entry.note_id]['subject'] = entry.subject;
+    
+    if(!note[entry.note_id]['receipent_mail'])
+      note[entry.note_id]['receipent_mail'] = new Array();
+    if(!note[entry.note_id]['receipent_ph_num'])
+      note[entry.note_id]['receipent_ph_num'] = new Array();
+    if(!note[entry.note_id]['actions'])
+      note[entry.note_id]['actions'] = new Array();
+   
+    var split = entry.receipents.split(", ");
+    for(var index in split) {
+      var s = split[index];
+      if(is_mail(s) && note[entry.note_id]['receipent_mail'].indexOf(s) < 0)
+        note[entry.note_id]['receipent_mail'].push(s);
+      if(is_ph_num(s) && note[entry.note_id]['receipent_ph_num'].indexOf(s) < 0)
+        note[entry.note_id]['receipent_ph_num'].push(s);
+    }   
+    
+    var asplit = entry.actions.split(", ");
+    for(var index in asplit) {
+      var a = asplit[index];
+      if(note[entry.note_id]['actions'].indexOf(a) < 0)
+        note[entry.note_id]['actions'].push(a);
+    }   
+    
+    if(!note[entry.note_id]['creation_epoch'])
+        note[entry.note_id]['creation_epoch'] = {}; 
+    
+    note[entry.note_id]['creation_epoch'][entry.creation_epoch] = {}; 
+    note[entry.note_id]['creation_epoch'][entry.creation_epoch]['body'] = entry.body;
+    note[entry.note_id]['creation_epoch'][entry.creation_epoch]['cron'] = entry.exec_cron;
+  });
+  return note;
+};
