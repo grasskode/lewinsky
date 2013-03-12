@@ -1,3 +1,4 @@
+var s_consumer = require("../services/consumer");
 var logger = require("../utils/log_factory").create("mail_consumer_route");
 
 /**

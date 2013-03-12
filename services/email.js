@@ -1,10 +1,7 @@
 var _ = require('underscore');
 var comb = require('comb');
-var schedule = require('node-schedule');
-var RecurrenceRule = schedule.RecurrenceRule;
-var notesImpl = require('./notes');
-var logger = require('../utils/log_factory').create("email");
 var SendGrid = require('sendgrid').SendGrid;
+var logger = require('../utils/log_factory').create("email");
 
 var sendgrid = new SendGrid(CONFIG.sendgrid.uid, CONFIG.sendgrid.key);
 

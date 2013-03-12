@@ -1,14 +1,7 @@
-var fs = require("fs");
 var crypto = require('crypto');
 var mysql = require("mysql");
 var moment = require("moment");
 var logger = require("../utils/log_factory").create("notes");
-
-exports.get = get;
-exports.create = create;
-exports.remove = remove;
-exports.searchSubject = searchSubject;
-exports.searchCron = searchCron;
 
 var searchSubject = function(userid, subject, callback) {
         logger.info("Searching "+userid+"'s notes for subject "+subject);
@@ -24,7 +17,7 @@ var searchSubject = function(userid, subject, callback) {
                 logger.error(err);
                 callback(err);
               } else {
-                var response = parser.consolidate(results);
+                var response = consolidate(results);
                 callback(null, response);
               }
               connection.destroy();
@@ -45,7 +38,7 @@ var searchCron = function(cron, callback) {
                 logger.error(err);
                 callback(err, null);
               } else {
-                var response = parser.consolidate(results);
+                var response = consolidate(results);
                 callback(null, response);
               }
               connection.destroy();
@@ -68,7 +61,7 @@ var get = function(userid, noteid, callback) {
                 logger.error(err);
                 callback({"error" : "could not get notes"}, null);
               } else {
-                var response = parser.consolidate(results);
+                var response = consolidate(results);
                 callback(null, response);
               }
               connection.destroy();
@@ -93,7 +86,7 @@ var get = function(userid, noteid, callback) {
                 console.log(err);
                 callback(false, {"error" : "could not get notes"});
               } else {
-                var response = parser.consolidate(results, count, noteid);
+                var response = consolidate(results, count, noteid);
                 console.log(response);
                 callback(true, response);
               }
@@ -185,6 +178,9 @@ var create = function(userid, note, callback) {
         // console.log(sqlquery.sql);
 };
 
+/*
+ * Remove a note for a user
+ */
 var remove = function(userid, noteid, callback) {
         logger.info("Deleting "+noteid+" for "+userid);
         var connection = mysql.createConnection({
@@ -205,6 +201,9 @@ var remove = function(userid, noteid, callback) {
         // console.log(sqlquery.sql);
 };
 
+/*
+ * Utility function to consolidate the entries into a single note
+ */
 function consolidate(entries) {
   var note = {}; 
   entries.forEach(function(entry) {
@@ -247,3 +246,22 @@ function consolidate(entries) {
   });
   return note;
 };
+
+function is_mail(element, index, array){
+  return element.match(/^(\w|\.)*@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/);
+}
+
+function is_ph_num(element, index, array) {
+  return element.match(/^\+(\d)+$/);
+}
+
+//console.log(is_mail("iitr.sourabh@abc.com"));
+//console.log(is_ph_num("+1231234567890"));
+//console.log(is_ph_num("abc@abc.com"));
+//console.log(is_mail("+1231234567890"));
+
+exports.get = get;
+exports.create = create;
+exports.remove = remove;
+exports.searchSubject = searchSubject;
+exports.searchCron = searchCron;

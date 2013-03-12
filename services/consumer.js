@@ -1,4 +1,5 @@
-var s_parser = require("./parser");
+var s_parser = require("../services/parser");
+var s_scheduler = require("../services/scheduler");
 var notes_dao = require("../dao/notes");
 var logger = require("../utils/log_factory").create("consumer");
 
@@ -38,11 +39,24 @@ exports.consume = function(parsedMail, callback) {
     var parsedText = s_parser.parse(text);
     var note = to_note(subject, parsedText);
 
-    notes_dao.create(userid, note, function(err, data) {
+    notes_dao.create(userid, note, function(err, noteid) {
         if(err)
             callback(err, null);
-        else
-            callback(null, data);
+        else{
+            notes_dao.get(userid, noteid, function(err, note) {
+                if(err)
+                    callback(err, null);
+                else{
+                    notes_dao.get(userid, noteid, function(err, notes) {
+                        if(err)
+                            logger.error(err);
+                        else
+                            s_scheduler.scheduleNote(notes[noteid]);
+                    });
+                    callback(null, noteid);
+                }
+            });
+        }
     });
 };
 

@@ -22,6 +22,7 @@
     "twilio-js" : "*",
     "sendgrid" : "*",
     "node-schedule" : "*",
-    "moment" : "*"
+    "moment" : "*",
+    "cron" : "*"
   }
 }

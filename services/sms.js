@@ -1,10 +1,7 @@
-var logger = require('../utils/log_factory').create("sms");
 var _ = require('underscore');
 var comb = require('comb');
-var schedule = require('node-schedule');
-var RecurrenceRule = schedule.RecurrenceRule;
-var notesImpl = require('./notes');
 var Twilio = require('twilio-js');
+var logger = require('../utils/log_factory').create("sms");
 
 Twilio.AccountSid = CONFIG.twilio.account_sid;
 Twilio.AuthToken  = CONFIG.twilio.auth_token;
@@ -16,13 +13,13 @@ var SMS = comb.define({
 			this._super(arguments);
 		},
 		
-		send : function(to, noteSubject, text){
+		send : function(to, subject, text){
 			_.each(to, function(num){
 				Twilio.SMS.create({
 					to: num, 
 					from: CONFIG.twilio.number, 
 					url: CONFIG.twilio.callback.sms, 
-					body : text
+					body : subject+" >> "+text
 				}, 
 				function(err,res) {
 					if(err){

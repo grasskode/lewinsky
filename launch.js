@@ -50,3 +50,10 @@ CONFIG["env"] = env;
 console.log("Launching app...");
 var app = require("./app");
 app.run(CONFIG.port);
+
+/*
+ * Run the schedler
+ */
+ console.log("Starting scheduler...");
+var scheduler = require('./services/scheduler');
+scheduler.run();

@@ -1,22 +1,52 @@
 var _ = require('underscore');
+var node_scheduler = require('node-schedule');
 var moment = require("moment");
 var notes_dao = require('../dao/notes');
 var schedules_dao = require('../dao/schedules');
+var s_communicator = require('./communicator');
 var logger = require("../utils/log_factory").create("scheduler");
 
-exports.run = run;
-exports.scheduleNotes = scheduleNotes;
-exports.scheduleNote = scheduleNote;
+var run = function(){
+    scheduleNotesForToday();
+    node_scheduler.scheduleJob('0 0 * * *', scheduleNotesForToday);
+    node_scheduler.scheduleJob('* * * * *', executeSchedules);
+};
+
+var executeSchedules = function() {
+    // get all the notes scheduled for the current minute
+    // send them to the communicator for execution
+    timestamp_str = moment().format("DD-MM-YYYY HH:mm");
+    logger.info("Executing schedules for "+timestamp_str);
+    schedules_dao.get(timestamp_str, function(err, data){
+        if(err)
+            logger.error(err);
+        else{
+            _.each(data, function(schedule){
+                logger.debug(schedule);
+                s_communicator.execute(schedule.user, schedule.note_id);
+            });
+        }
+    });
+}
+
+/*
+ * -> Run every 24 hours
+ * -> clear the existing schedules
+ * -> Search for all the notes scheduled for today (or the remaining time)
+ */
+var scheduleNotesForToday = function() {
+    logger.info("Scheduling notes for today.");
+    schedules_dao.clear();
+    scheduleNotesFor();
+}
 
 /**
- * -> Run every 24 hours TODO
- * -> clear the existing schedules TODO
- * -> Search for all the notes scheduled for today (or the remaining time)
  *  -> Create a cron expression
  * 	-> Search notes for that cron expression
  * -> schedule each note according to actions
  */
-var run = function(base){
+var scheduleNotesFor = function(base) {
+
     /*
      * say today is 12-12-2012
      * For notes scheduled for today, the crons can be : 
@@ -50,17 +80,16 @@ var scheduleNotes = function(notes){
  * Schedule one note
  */
 var scheduleNote = function(note){
+    logger.info("Scheduling note "+note.note_id);
     var crons = [];
     _.each(note.creation_epoch, function(entry){
         if(! _.contains(crons, entry.cron)){
+            logger.debug("Adding cron "+entry.cron+" for note "+note.note_id);
             crons.push(entry.cron);
         }
     });
     timestamps = getTimestamps(crons);
-    s_schedules.add(note.user, note.subject, timestamps, function(err) {
-        if(err)
-            logger.error(err);
-    });
+    schedules_dao.add(note.user, note.note_id, timestamps);
 };
 
 /**
@@ -102,7 +131,8 @@ var getTimestamps = function(crons) {
                     timestamp.minute(mm);
 
                     if (! _.contains(timestamps, timestamp)) 
-                        timestamps.push(timestamp.format("DD-MM-YYYY HH:mm"));
+                        timestamp_str = timestamp.format("DD-MM-YYYY HH:mm");
+                        timestamps.push(timestamp_str);
                 });
             });
         }
@@ -120,3 +150,7 @@ function range(start, end)
         foo.push(i);
     return foo;
 }
+
+exports.run = run;
+exports.scheduleNotes = scheduleNotes;
+exports.scheduleNote = scheduleNote;

@@ -1,8 +1,5 @@
 var _ = require('underscore');
 var comb = require('comb');
-var schedule = require('node-schedule');
-var RecurrenceRule = schedule.RecurrenceRule;
-var notesImpl = require('./notes');
 var logger = require('../utils/log_factory').create("call");
 
 var Twilio = require('twilio-js');
@@ -16,10 +13,12 @@ var Call = comb.define({
 			this._super(arguments);
 		},
 		
-		send : function(to, noteSubject, userId, text){
+		send : function(to, noteid, user){
 			_.each(to, function(num){
 				Twilio.Call.create({to: num, from: CONFIG.twilio.number, 
-                                    url: CONFIG.twilio.callback.call + "?user=" + userId + "&subject=" + encodeURIComponent(noteSubject)}, 
+                                    url: CONFIG.twilio.callback.call 
+                                            + "?user=" + encodeURIComponent(user) 
+                                            + "&note=" + encodeURIComponent(noteid)}, 
                                     function(err,res) {
 					if(err){
 						logger.error(err);
