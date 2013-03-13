@@ -1,4 +1,5 @@
 {
-    "port" : "6666",
-    "root" : "/home/karan/workspace/mypa"
+    "port" : "20000",
+    "root" : "/home/ubuntu/projects/mypa",
+    "env"  : "prod"
 }
