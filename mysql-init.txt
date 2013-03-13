@@ -1,0 +1,21 @@
+create database mypa;
+
+use mypa;
+
+CREATE TABLE `notes` (
+  `note_id` varchar(50) NOT NULL,
+  `user` varchar(100) NOT NULL,
+  `subject` text NOT NULL,
+  `body` text,
+  `creation_epoch` bigint(20) NOT NULL,
+  `exec_cron` varchar(20) DEFAULT NULL,
+  `attachments` text,
+  `receipents` text,
+  `actions` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `schedules` (
+  `note_id` varchar(50) NOT NULL,
+  `timestamp` varchar(50) DEFAULT NULL,
+  `user` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
