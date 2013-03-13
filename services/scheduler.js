@@ -84,7 +84,7 @@ var scheduleNote = function(note){
     var crons = [];
     _.each(note.creation_epoch, function(entry){
         if(! _.contains(crons, entry.cron)){
-            if(cron) {
+            if(entry.cron) {
                 logger.debug("Adding cron "+entry.cron+" for note "+note.note_id);
                 crons.push(entry.cron);
             }

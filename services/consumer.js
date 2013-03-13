@@ -43,19 +43,14 @@ exports.consume = function(parsedMail, callback) {
         if(err)
             callback(err, null);
         else{
-            notes_dao.get(userid, noteid, function(err, note) {
+            notes_dao.get(userid, noteid, function(err, notes) {
                 if(err)
                     callback(err, null);
                 else{
-                    notes_dao.get(userid, noteid, function(err, notes) {
-                        if(err)
-                            logger.error(err);
-                        else
-                            s_scheduler.scheduleNote(notes[noteid]);
-                    });
-                    callback(null, noteid);
+                    s_scheduler.scheduleNote(notes[noteid]);
                 }
             });
+            callback(null, noteid);
         }
     });
 };

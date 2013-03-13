@@ -16,8 +16,8 @@ function respond(res, code, message) {
 module.exports = function(app) {
   
   app.post("/consume", function(req, res) {
-    logger.info("Consuming mail :");
-    logger.info(req.body);
+    logger.debug("Consuming mail :");
+    logger.debug(req.body);
     s_consumer.consume(req.body, function(err, data) {
         if(err)
             respond(res, 500, err);
