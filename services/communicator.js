@@ -3,6 +3,7 @@ var Call = require('./call');
 var SMS = require('./sms');
 var Email = require('./email');
 var notes_dao = require('../dao/notes');
+var s_parser = require('../services/parser');
 var logger = require('../utils/log_factory').create("communicator");
 
 exports.execute = function(user, noteid) {
@@ -15,18 +16,6 @@ exports.execute = function(user, noteid) {
     });
 };
 
-var getBody = function(note){
-    var body = '';
-    var entries = note['creation_epoch'];
-    for (var key in entries) {
-        if (entries.hasOwnProperty(key)) {
-            var entry = entries[key];
-            body += entry.body + "\n";
-        }
-    }
-    return body;
-};
-	
 var send = function(note){
     logger.debug("Sending note");
     logger.debug(note);
@@ -34,8 +23,10 @@ var send = function(note){
     var user = note.user;
     var subject = note.subject;
     var email = note.receipent_mail;
+    if(!email || email == "")
+        email = user;
     var number = note.receipent_ph_num;
-    var text = getBody(note);
+    var text = s_parser.getBody(note);
     var actions = note.actions;
     
     _.each(actions, function(action){
@@ -53,4 +44,3 @@ var send = function(note){
         }
     });
 };
-	

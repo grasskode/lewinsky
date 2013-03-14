@@ -61,4 +61,18 @@ function tokenList() {
 
 }
 
+var getBody = function(note){
+    var body = ''; 
+    var entries = note['creation_epoch'];
+    for (var key in entries) {
+        if (entries.hasOwnProperty(key)) {
+            var entry = entries[key];
+            body += entry.body + "\n";
+        }   
+    }   
+    return body;
+};
+
+
 exports.parse = parse;
+exports.getBody = getBody;

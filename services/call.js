@@ -14,6 +14,7 @@ var Call = comb.define({
 		},
 		
 		send : function(to, noteid, user){
+            logger.debug("Calling "+to+" with note "+noteid+" on behalf of "+user);
 			_.each(to, function(num){
 				Twilio.Call.create({to: num, from: CONFIG.twilio.number, 
                                     url: CONFIG.twilio.callback.call 
@@ -23,7 +24,7 @@ var Call = comb.define({
 					if(err){
 						logger.error(err);
 					}else
-						logger.info('HOLY MOLY! PHONES ARE RINGING');
+						logger.info('Call placed!');
 				});
 			});
 		}

@@ -13,6 +13,7 @@ var Email = comb.define({
 		},
 		
 		send : function(to, noteSubject, text){
+            logger.debug("Sending email to "+to);
 			sendgrid.send({
 				to: to,
 				from: CONFIG.sendgrid.master_email,
@@ -22,7 +23,7 @@ var Email = comb.define({
 				if (!success) {
 					logger.error(message);
 				}else{
-					logger.info("Email sent to : " + to);
+					logger.info("Email sent!");
 				}
 			});
 		}

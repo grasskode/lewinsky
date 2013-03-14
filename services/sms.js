@@ -14,18 +14,20 @@ var SMS = comb.define({
 		},
 		
 		send : function(to, subject, text){
+            msg_body = subject+" >> "+text;
+            logger.debug("Sending message to "+to+"\n"+msg_body);
 			_.each(to, function(num){
 				Twilio.SMS.create({
 					to: num, 
 					from: CONFIG.twilio.number, 
 					url: CONFIG.twilio.callback.sms, 
-					body : subject+" >> "+text
+					body : msg_body
 				}, 
 				function(err,res) {
 					if(err){
 						logger.error(err);
 					}else
-						logger.info('You have a new message!');
+						logger.info('Message sent!');
 				});
 			});
 		}

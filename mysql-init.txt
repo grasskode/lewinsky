@@ -17,5 +17,6 @@ CREATE TABLE `notes` (
 CREATE TABLE `schedules` (
   `note_id` varchar(50) NOT NULL,
   `timestamp` varchar(50) DEFAULT NULL,
-  `user` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `user` varchar(100) NOT NULL,
+  UNIQUE KEY `note_id` (`note_id`,`timestamp`,`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

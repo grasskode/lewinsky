@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var s_parser = require('../services/parser');
 var notes_dao = require('../dao/notes');
 var logger = require('../utils/log_factory').create("call_route");
 
@@ -11,11 +12,12 @@ var CallRoute = function(app){
 	app.post('/call', function(req, res){
 		var user = req.query['user'];
 		var noteid = req.query['note'];
+        logger.debug("Call API hit for "+user+" note "+noteid);
 		
 		if(user && noteid){
 			notes_dao.get(user, noteid, function(err, notes){
 				if(!err){
-                    var text = comm.getBody(notes[noteid]);
+                    var text = s_parser.getBody(notes[noteid]);
                     sendResponse(text);
 				}else{
 					logger.error(err);

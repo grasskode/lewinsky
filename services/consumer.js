@@ -33,7 +33,7 @@ exports.consume = function(parsedMail, callback) {
     var matches = user_email.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
     // ASSUMPTION : There cannot be more than one "from"
     var userid = matches[0];
-    var subject = parsedMail.subject;
+    var subject = get_subject(parsedMail.subject);
     var text = parsedMail.text;
     
     var parsedText = s_parser.parse(text);
@@ -54,6 +54,21 @@ exports.consume = function(parsedMail, callback) {
         }
     });
 };
+
+function get_subject(full_subject) {
+    while(true) {
+        if(full_subject.indexOf("Re:") == 0 || full_subject.indexOf("Fw:") == 0){
+            full_subject = full_subject.substring(3).trim();
+        }
+        else if (full_subject.indexOf("FWD:") == 0 || full_subject.indexOf("Fwd:") == 0 
+                || full_subject.indexOf("Fyi:") == 0 || full_subject.indexOf("FYI:") == 0) {
+            full_subject = full_subject.substring(4).trim();
+        }
+        else
+            break;
+    }
+    return full_subject;
+}
 
 /**
  * Utility function to create a note with given subject out of the given parsed text.
