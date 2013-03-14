@@ -11,8 +11,7 @@
     "auth_token" : "09eca6706468e0f26e599a68faaba78f",
     "number" : "+13072985394",
     "callback" : {
-        "call" : "http://ec2-54-242-107-220.compute-1.amazonaws.com:8080/lewinsky/call",
-        "sms" : "http://ec2-54-242-107-220.compute-1.amazonaws.com:8080/lewinsky/msg"
+        "call" : "http://ec2-54-242-107-220.compute-1.amazonaws.com:8080/lewinsky/call"
     }
   },
 

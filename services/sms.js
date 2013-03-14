@@ -20,7 +20,6 @@ var SMS = comb.define({
 				Twilio.SMS.create({
 					to: num, 
 					from: CONFIG.twilio.number, 
-					url: CONFIG.twilio.callback.sms, 
 					body : msg_body
 				}, 
 				function(err,res) {

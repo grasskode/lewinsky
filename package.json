@@ -8,21 +8,16 @@
   "dependencies": {
     "express": "3.0.0rc4",
     "crypto": "*",
-    "jade": "*",
     "mime" : "*",
-    "jsdom" : "*",
     "request" : "*",
     "config" : "*",
     "log4js" : "*",
-    "patio" : "*",
     "comb" : "*",
     "underscore" : "*",
     "mysql" : "2.0.0-alpha7",
-    "vows" : "*",
     "twilio-js" : "*",
     "sendgrid" : "*",
     "node-schedule" : "*",
-    "moment" : "*",
-    "cron" : "*"
+    "moment" : "*"
   }
 }

@@ -6,6 +6,5 @@
 module.exports = function(app){
 	require('./mail_consumer_route')(app);
 	require('./call_route')(app);
-	require('./msg_route')(app);
 //	require('./note_route')(app);
 };
