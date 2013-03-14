@@ -3,7 +3,7 @@ var mysql = require("mysql");
 var moment = require("moment");
 var logger = require("../utils/log_factory").create("notes");
 
-var searchSubject = function(userid, subject, callback) {
+/*var searchSubject = function(userid, subject, callback) {
         logger.info("Searching "+userid+"'s notes for subject "+subject);
         var connection = mysql.createConnection({
           host : CONFIG.db.host,
@@ -23,7 +23,7 @@ var searchSubject = function(userid, subject, callback) {
               connection.destroy();
         });
         // console.log(sqlquery.sql);
-};
+};*/
 
 var searchCron = function(cron, callback) {
         var connection = mysql.createConnection({
@@ -263,5 +263,5 @@ function is_ph_num(element, index, array) {
 exports.get = get;
 exports.create = create;
 exports.remove = remove;
-exports.searchSubject = searchSubject;
+//exports.searchSubject = searchSubject;
 exports.searchCron = searchCron;

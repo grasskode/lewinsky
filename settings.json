@@ -1,4 +1,5 @@
 {
     "port" : "6666",
-    "root" : "/home/karan/workspace/mypa"
+    "root" : "/home/karan/workspace/mypa",
+    "env"  : "dev"
 }
