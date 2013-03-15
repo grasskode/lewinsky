@@ -18,20 +18,20 @@ var CallRoute = function(app){
 			notes_dao.get(user, noteid, function(err, notes){
 				if(!err){
                     var text = s_parser.getBody(notes[noteid]);
-                    sendResponse(text);
+                    sendResponse(text, res);
 				}else{
 					logger.error(err);
 				}
 			});
 		}else{
 			var text = "Hello, No message found";
-			sendResponse(text);
+			sendResponse(text, res);
 		}
 		
 	});
 };
 
-var sendResponse = function(text) {
+var sendResponse = function(text, res) {
     res.header("content-type", "text/xml");
     var response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<Response>" +
