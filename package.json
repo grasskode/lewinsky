@@ -15,7 +15,7 @@
     "comb" : "*",
     "underscore" : "*",
     "mysql" : "2.0.0-alpha7",
-    "twilio-js" : "*",
+    "twilio" : "*",
     "sendgrid" : "*",
     "node-schedule" : "*",
     "moment" : "*"
