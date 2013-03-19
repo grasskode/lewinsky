@@ -1,6 +1,6 @@
 drop database mylewinsky;
 create database mylewinsky;
-use mypa;
+use mylewinsky;
 
 revoke all privileges on *.* from 'bill'@'localhost';
 drop user 'bill'@'localhost';
