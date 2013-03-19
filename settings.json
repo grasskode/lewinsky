@@ -1,5 +1,5 @@
 {
     "port" : "20100",
     "root" : "/home/ubuntu/projects/mypa",
-    "env"  : "test"
+    "env"  : "preprod"
 }

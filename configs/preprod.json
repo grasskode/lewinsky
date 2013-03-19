@@ -1,7 +1,7 @@
 {
   "db" : {
     "host" : "localhost",
-    "database" : "mylewinsky",
+    "database" : "mypa",
     "user" : "bill",
     "password" : "clinton"
   },
@@ -11,7 +11,7 @@
     "auth_token" : "09eca6706468e0f26e599a68faaba78f",
     "number" : "+13072985394",
     "callback" : {
-        "call" : "http://ec2-54-242-107-220.compute-1.amazonaws.com:8080/lewinsky/call"
+        "call" : "http://localhost:8080/lewinsky/test/call"
     }
   },
 
