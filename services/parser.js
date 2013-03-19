@@ -45,7 +45,7 @@ function tokenizer(text) {
 }
 
 function tokenList() {
-  this.list = ["@date", "@repeat", "@to", "@action"];
+  this.list = ["@date", "@repeat", "@to", "@action", "@cancel"];
   
   this.extract = function(token) {
     for(var index in this.list ) {

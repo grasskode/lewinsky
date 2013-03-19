@@ -3,28 +3,6 @@ var mysql = require("mysql");
 var moment = require("moment");
 var logger = require("../utils/log_factory").create("notes");
 
-/*var searchSubject = function(userid, subject, callback) {
-        logger.info("Searching "+userid+"'s notes for subject "+subject);
-        var connection = mysql.createConnection({
-          host : CONFIG.db.host,
-          database : CONFIG.db.database,
-          user : CONFIG.db.user,
-          password : CONFIG.db.password,
-        });
-        var query = "SELECT * FROM notes WHERE `user`="+connection.escape(userid)+" and `subject`="+connection.escape(subject)+" ORDER BY `note_id`, `creation_epoch`";
-        var sqlquery = connection.query(query, function (err, results) {
-              if(err) {
-                logger.error(err);
-                callback(err);
-              } else {
-                var response = consolidate(results);
-                callback(null, response);
-              }
-              connection.destroy();
-        });
-        // console.log(sqlquery.sql);
-};*/
-
 var searchCron = function(cron, callback) {
         var connection = mysql.createConnection({
           host : CONFIG.db.host,
@@ -69,32 +47,6 @@ var get = function(userid, noteid, callback) {
         // console.log(sqlquery.sql);
 };
 
-/*function get(userid, count, from, callback) {
-        if(!count)
-                count = 1;
-        console.log("Getting "+count+" notes for "+userid+" from "+from);
-        
-        var connection = mysql.createConnection({
-          host : CONFIG.db.host,
-          database : CONFIG.db.database,
-          user : CONFIG.db.user,
-          password : CONFIG.db.password,
-        });
-        var query = "SELECT * FROM notes WHERE `user`="+connection.escape(userid)+" ORDER BY `note_id`, `creation_epoch`";
-        var sqlquery = connection.query(query, function (err, results) {
-              if(err) {
-                console.log(err);
-                callback(false, {"error" : "could not get notes"});
-              } else {
-                var response = consolidate(results, count, noteid);
-                console.log(response);
-                callback(true, response);
-              }
-              connection.destroy();
-        });
-        console.log(sqlquery.sql);
-}*/
-
 /**
  * Utility function to create a cron out of the date string and the repeat pattern
  */
@@ -102,13 +54,14 @@ var createCron = function(datestr, repeat) {
     if(!datestr)
       return null;
 
+    var now = moment();
 	var d = moment(datestr);
-	var year = d.year();
-	var month = d.month() + 1;
+	var year = (isNaN(d.year()))?now.year():d.year();
+	var month = (isNaN(d.month()))?now.month()+1:d.month()+1;
     var day = "*";
-	var date = d.date();
-	var hour = d.hour();
-	var minute = d.minute();
+	var date = (isNaN(d.date()))?now.date():d.date();
+	var hour = (isNaN(d.hour()))?now.hour:d.hour();
+	var minute = (isNaN(d.minute()))?now.minute():d.minute();
     
     if(repeat){
       if(repeat == "yearly")
@@ -233,8 +186,19 @@ function consolidate(entries) {
     var asplit = entry.actions.split(", ");
     for(var index in asplit) {
       var a = asplit[index];
-      if(note[entry.note_id]['actions'].indexOf(a) < 0)
-        note[entry.note_id]['actions'].push(a);
+      var a_dash = "-"+a;
+      var cancel = false;
+      if(a.indexOf("-") == 0){
+          a_dash = a.substring(1);
+          cancel = true;
+      }
+      var index = note[entry.note_id]['actions'].indexOf(a_dash);
+      if(index < 0) {
+          if(note[entry.note_id]['actions'].indexOf(a) < 0)
+                note[entry.note_id]['actions'].push(a);
+      } else {
+          note[entry.note_id]['actions'].splice(index, 1);
+      }
     }   
     
     if(!note[entry.note_id]['creation_epoch'])
@@ -263,5 +227,4 @@ function is_ph_num(element, index, array) {
 exports.get = get;
 exports.create = create;
 exports.remove = remove;
-//exports.searchSubject = searchSubject;
 exports.searchCron = searchCron;

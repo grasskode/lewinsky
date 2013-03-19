@@ -1,0 +1,36 @@
+{
+  "db" : {
+    "host" : "localhost",
+    "database" : "mypa",
+    "user" : "bill",
+    "password" : "clinton"
+  },
+
+  "twilio" : {
+    "account_sid" : "ACd775520cecbc638963bece7e25f75214",
+    "auth_token" : "09eca6706468e0f26e599a68faaba78f",
+    "number" : "+13072985394",
+    "callback" : {
+        "call" : "http://localhost:8080/lewinsky/test/call"
+    }
+  },
+
+  "sendgrid" : {
+      "uid" : "guptakaran11",
+      "key" : "l3winsky",
+      "master_email" : "note@mylewinsky.com"
+  },
+
+  "log" : {
+    "appenders": [
+      {"type" : "console"},
+        { 
+            "type": "file", 
+            "filename": "logs/dev_web.log",
+            "maxLogSize": 1024,
+            "level": "WARN",
+            "backups": 3
+        }
+    ]
+  }
+}
