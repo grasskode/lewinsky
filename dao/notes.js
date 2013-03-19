@@ -54,13 +54,14 @@ var createCron = function(datestr, repeat) {
     if(!datestr)
       return null;
 
+    var now = moment();
 	var d = moment(datestr);
-	var year = d.year();
-	var month = d.month() + 1;
+	var year = (isNaN(d.year()))?now.year():d.year();
+	var month = (isNaN(d.month()))?now.month()+1:d.month()+1;
     var day = "*";
-	var date = d.date();
-	var hour = d.hour();
-	var minute = d.minute();
+	var date = (isNaN(d.date()))?now.date():d.date();
+	var hour = (isNaN(d.hour()))?now.hour:d.hour();
+	var minute = (isNaN(d.minute()))?now.minute():d.minute();
     
     if(repeat){
       if(repeat == "yearly")
