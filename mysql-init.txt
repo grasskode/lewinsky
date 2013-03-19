@@ -1,3 +1,5 @@
+drop database mypa;
+
 create database mypa;
 
 use mypa;
