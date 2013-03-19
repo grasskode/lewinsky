@@ -78,9 +78,17 @@ function to_note(subject, parsedText) {
   note['subject'] = subject;
   note['body'] = parsedText['@body'];
   note['receipents'] = (parsedText['@to'])?parsedText['@to'].join(", "):"";
-  note['date'] = (parsedText['@date'])?parsedText['@date'].join(", "):"";
+  note['date'] = (parsedText['@date'])?parsedText['@date'].join(" +0530, "):"";
   note['repeat'] = (parsedText['@repeat'])?parsedText['@repeat'].join(", "):"";
   note['actions'] = (parsedText['@action'])?parsedText['@action'].join(", "):"";
+  if(parsedText['@cancel']){
+      for(var i=0; i<parsedText['@cancel'].length; i++) {
+          var cancel = parsedText['@cancel'][i];
+          if(note['actions'] != "")
+              note['actions'] += ", ";
+          note['actions'] += "-"+cancel;
+      }
+  }
   logger.debug(note);
   return note;
 }
