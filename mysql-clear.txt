@@ -1,4 +1,4 @@
-use mypa;
+use mylewinsky;
 
 delete from notes;
 
