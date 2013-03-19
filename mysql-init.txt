@@ -1,9 +1,9 @@
 drop database mypa;
-
 create database mypa;
-
 use mypa;
 
+revoke all privileges on *.* from 'bill'@'localhost';
+drop user 'bill'@'localhost';
 create user 'bill'@'localhost' identified by 'clinton';
 grant delete, insert, select, update on mypa.* to 'bill'@'localhost';
 
