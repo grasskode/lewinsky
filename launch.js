@@ -9,12 +9,13 @@ console.log("Configuring environment variables.");
  * Checks if already set or passed as parameter.
  * Defaults to dev
  */
+var envs = ["dev", "preprod", "prod"];
 if(! process.env.NODE_ENV) {
   var env = process.argv[2];
-  if(! _.contains(["dev", "prod", "test"], env) ) {
+  if(! _.contains(envs, env) ) {
       env = settings.env;
   }
-  if(! _.contains(["dev", "prod", "test"], env) ) {
+  if(! _.contains(envs, env) ) {
           env = "dev";
   }
   process.env.NODE_ENV = env;
