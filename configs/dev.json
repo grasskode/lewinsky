@@ -2,8 +2,8 @@
   "db" : {
     "host" : "localhost",
     "database" : "mypa",
-    "user" : "root",
-    "password" : ""
+    "user" : "bill",
+    "password" : "clinton"
   },
 
   "twilio" : {
@@ -11,14 +11,13 @@
     "auth_token" : "09eca6706468e0f26e599a68faaba78f",
     "number" : "+13072985394",
     "callback" : {
-        "call" : "http://ec2-54-242-107-220.compute-1.amazonaws.com:8080/lewinsky/call",
-        "sms" : "http://ec2-54-242-107-220.compute-1.amazonaws.com:8080/lewinsky/sms"
+        "call" : "http://ec2-54-242-107-220.compute-1.amazonaws.com:8080/lewinsky/call"
     }
   },
 
   "sendgrid" : {
       "uid" : "guptakaran11",
-      "key" : "l3w!nsky",
+      "key" : "l3winsky",
       "master_email" : "note@mylewinsky.com"
   },
 
