@@ -1,5 +1,5 @@
 {
-    "port" : "6666",
-    "root" : "/home/karan/workspace/mypa",
-    "env"  : "dev"
+    "port" : "20100",
+    "root" : "/home/ubuntu/projects/mypa",
+    "env"  : "test"
 }
