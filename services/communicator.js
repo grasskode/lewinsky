@@ -37,7 +37,7 @@ var send = function(note){
           }else if(action == 'msg'){
               SMS.send(number, subject, text);
           }else if(action == 'mail'){
-              Email.send(email, subject, text);
+              Email.send(email, subject, text, user);
           } else {
               logger.error("action : " + action+" not found.");
           }
