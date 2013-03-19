@@ -4,6 +4,9 @@ create database mypa;
 
 use mypa;
 
+create user 'bill'@'localhost' identified by 'clinton';
+grant delete, insert, select, update on mypa.* to 'bill'@'localhost';
+
 CREATE TABLE `notes` (
   `note_id` varchar(50) NOT NULL,
   `user` varchar(100) NOT NULL,
