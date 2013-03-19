@@ -12,11 +12,13 @@ var Email = comb.define({
 			this._super(arguments);
 		},
 		
-		send : function(to, noteSubject, text){
+		send : function(to, noteSubject, text, from){
             logger.debug("Sending email to "+to);
+            if(from == to)
+                from = CONFIG.sendgrid.master_email;
 			sendgrid.send({
 				to: to,
-				from: CONFIG.sendgrid.master_email,
+				from: from,
 				subject: noteSubject,
 				text: text
 			}, function(success, message) {

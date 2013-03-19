@@ -1,19 +1,22 @@
+var _ = require("underscore");
+
+var tokenlist = ["@date", "@repeat", "@to", "@action", "@cancel"];
+
 function parse(text) {
   var parsed = {};
   var t = new tokenizer(text);
-  var tl = new tokenList();
   var token = t.head();
   while(token) {
-    var info = tl.extract(token);
-    if(info) {
-      if(!parsed[info['token']])
-        parsed[info['token']] = new Array();
-      if(parsed[info['token']].indexOf(info['info']) < 0)
-        parsed[info['token']].push(info['info']);
-      token = t.remove();
-    } else {
+      if(_.contains(tokenlist, token)) {
+        var info = t.next();
+        if(!parsed[token])
+            parsed[token] = new Array();
+        if(parsed[token].indexOf(info) < 0)
+            parsed[token].push(info);
+      } else {
+          t.collect();
+      }
       token = t.next();
-    }
   }
   parsed['@body'] = t.result();
   return parsed;
@@ -22,9 +25,12 @@ function parse(text) {
 function tokenizer(text) {
   this.parsed = new Array();
   this.tokens = text.split(/\s+/);
+
+  this.collect = function() {
+      this.parsed.push(this.tokens[0]);
+  }
   
   this.next = function() {
-    this.parsed.push(this.tokens[0]);
     this.tokens.shift();
     return this.tokens[0];
   };
@@ -33,31 +39,9 @@ function tokenizer(text) {
     return this.tokens[0];
   }
 
-  this.remove = function() {
-    this.tokens.shift();
-    return this.tokens[0];
-  };
-
   this.result = function(){
     return this.parsed.join(" ");
   }
-
-}
-
-function tokenList() {
-  this.list = ["@date", "@repeat", "@to", "@action", "@cancel"];
-  
-  this.extract = function(token) {
-    for(var index in this.list ) {
-      var entry = this.list[index];
-      if(token.indexOf(entry) == 0){
-        var info = {};
-        info['token'] = entry;
-        info['info'] = token.substr(entry.length);
-        return info;
-      }
-    }
-  };
 
 }
 
