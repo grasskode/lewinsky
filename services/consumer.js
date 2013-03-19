@@ -84,7 +84,7 @@ function to_note(subject, parsedText) {
           var date = parsedText['@date'][i];
           if(note['date'] != "")
               note['date'] += ", ";
-          note['date'] += date+" +0730";
+          note['date'] += date+" +0530";
       }
   }
   note['repeat'] = (parsedText['@repeat'])?parsedText['@repeat'].join(", "):"";
