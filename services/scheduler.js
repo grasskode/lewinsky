@@ -16,13 +16,12 @@ var executeSchedules = function() {
     // get all the notes scheduled for the current minute
     // send them to the communicator for execution
     timestamp_str = moment().format("DD-MM-YYYY HH:mm");
-    logger.info("Executing schedules for "+timestamp_str);
     schedules_dao.get(timestamp_str, function(err, data){
         if(err)
             logger.error(err);
         else{
             _.each(data, function(schedule){
-                logger.debug(schedule);
+                logger.debug("Scheduling : \n"+schedule);
                 s_communicator.execute(schedule.user, schedule.note_id);
             });
         }

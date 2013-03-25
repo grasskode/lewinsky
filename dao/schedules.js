@@ -9,7 +9,7 @@ var pool  = mysql.createPool({
 });
 
 exports.get = function(timestamp, callback) {
-    logger.debug("Getting notes scheduled at "+timestamp);
+    //logger.debug("Getting notes scheduled at "+timestamp);
     pool.getConnection(function(err, connection) {
         // connected! (unless `err` is set)
         if(err)
@@ -64,7 +64,7 @@ var checkAndCreate = function(user, noteid, timestamp) {
 };
 
 var create = function(user, noteid, timestamp, callback) {
-    logger.debug("Creating schedule for "+noteid+" of "+user+" at "+timestamp);
+    //logger.debug("Creating schedule for "+noteid+" of "+user+" at "+timestamp);
     pool.getConnection(function(err, connection) {
         // connected! (unless `err` is set)
         if(err)
@@ -88,7 +88,7 @@ var create = function(user, noteid, timestamp, callback) {
 };
 
 var get = function(user, noteid, timestamp, callback) {
-    logger.debug("Getting schedule for "+noteid+" of "+user+" at "+timestamp);
+    //logger.debug("Getting schedule for "+noteid+" of "+user+" at "+timestamp);
     pool.getConnection(function(err, connection) {
         // connected! (unless `err` is set)
         if(err)
