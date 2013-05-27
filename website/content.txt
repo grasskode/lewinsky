@@ -1,0 +1,62 @@
+Description :
+
+Lewinsky is her name. Her job is to keep you stress-free! She lets you forget things. Just drop her a mail and she will take note of whatever it is that you need to forget.
+
+Lewinsky is the PA for the lazy. It works on a simple mailing interface. You can use lewinsky to take notes and set up reminders. And what's new with that? For one, lewinsky stacks your notes. You can add on to the same note over time. Still not impressed? Lewinsky can replay your notes to you as reminders. Now you can let your imagination fly. Using the two, you can build up agendas, set alarms, automate OOO mails, etc. 
+
+So get creative, try her out!
+
+Usage :
+
+Mail to note@mylewinsky.com
+
+The body of the mail is the note and the subject of the mail is the subject of the note. The note's subject uniquely identifies the note and you can use the same subject if you want to stack on to the note later.
+
+You can further schedule actions on this note. The actions are mail/call/msg. You can schedule these actions for a particular time; you can add a repeat pattern to the scheduled action (yearly, monthly, weekly, daily, hourly or minutely). And if you get fed up of the scheduled actions, you can cancel them.
+
+Special tokens are as follows :
+@action : Action that you want to schedule (mail / call / msg)
+@date : Date at which you want to schedule actions in the format YYYY-MM-ddTHH:mm
+@repeat : repetition pattern (yearly / monthly / weekly / daily / hourly / minutely)
+@to : recipient of the action. email id in case of mail, phone number in case of call / msg
+@cancel : cancellation of action
+
+
+Examples :
+
+Mail 1
+This mail is resent to the user at the specified time.
+
+Sample Subject 1
+Remind me about this again tomorrow morning. @action mail @date 2013-03-20T08:00
+
+Mail 2
+This mail will schedule mail 1 every hour
+
+Sample Subject 1
+@repeat hourly
+
+Mail 3
+This mail will cancel the scheduled action in Mail 1
+
+Sample Subject 1
+@cancel mail
+
+Mail 4
+This mail will be sent to someone@something.com at the specified time
+
+Sample Subject 2
+Schedule mail to someone at given time. @action mail @to someone@something.com @date 2013-03-20T08:00
+
+Lets say its 3 AM and you forgot Lavanya's birthday. Her phone's switched off. Now you have to buy her an expensive gift tomorrow. You want to be reminded about it tomorrow at 6 PM when you leave office. Send this mail to note@mylewinsky.com
+
+Subject : Buy Gift
+Body : Buy a shit expensive gift or you will get no cookies! @action mail @date 2013-03-21T18:00
+
+
+Now lets say you think you might not check the mail since you might be on road and you want to be called to remind you the same. Send another mail to note@mylewinsky.com :
+
+Subject : Buy Gift
+Body : @action call @to +918527535793
+
+Since the subject is the same, you need not specify the body. The body of the last message will be played back to you in the call. At the same time as was specified in the last mail.

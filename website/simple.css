@@ -1,0 +1,187 @@
+/* CSS reset */
+html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
+    margin:0;
+    padding:0;
+}
+
+body {
+    background-color:#E6A9EC;
+}
+
+.content {
+    width:1000px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#header_bg {
+    background-color:#E6A9EC;
+}
+
+#header {
+    min-height:10px;
+    width:100%;
+    overflow:hidden;
+    padding:30px 0px 30px 0px;
+}
+
+#nav_bar {
+    width:200px;
+    min-height:10px;
+    overflow:hidden;
+    margin-left:auto;
+    margin-right:auto;
+    float:right;
+}
+
+.nav_el {
+    width:100px;
+    margin:5px 50px 5px 0px;
+    padding:0px 22px 0px 22px;
+    float:left;
+    text-align:center;
+}
+
+.nav_el a {
+    color:#C25A7C;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:17px;
+    text-decoration:none;
+}
+
+.nav_el a:hover {
+    color:#7E354D;
+}
+
+.title {
+    width:500px;
+    float:left;
+    padding:0px 20px 0px 20px;
+    text-align:left;
+}
+
+.title h1{
+    color:#B93B8F;
+    font-family: Rockwell, "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif;
+    font-size:50px;
+}
+
+/*.title p{
+    color:#E56717;
+    font-family: Geneva, Tahoma, Verdana, sans-serif;
+    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+    font-size:12px;
+    font-weight:bold;
+}*/
+
+#main_bg {
+    background-color:#F9B7FF;
+}
+
+#main {
+    min-height:100px;
+    width:100%;
+    overflow:hidden;
+    padding:10px 0px 10px 0px;
+    text-align:center;
+}
+
+#description {
+    width:700px;
+    float:left;
+    clear:both;
+    padding:10px 0px 10px 0px;
+    border-bottom:solid;
+    border-width:1.5px;
+    border-color:#C38EC7;
+}
+
+#description p {
+    color:#B93B8F;
+    font-size:16px;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+#usage {
+    width:700px;
+    float:right;
+    clear:both;
+    padding:10px 0px 10px 0px;
+    margin-top:10px;
+    border-top:solid;
+    border-bottom:solid;
+    border-width:1.5px;
+    border-color:#C38EC7;
+}
+
+#usage p {
+    color:#B93B8F;
+    font-size:16px;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+#examples {
+    width:700px;
+    float:left;
+    clear:both;
+    padding:10px 0px 10px 0px;
+    margin-top:10px;
+    border-top:solid;
+    border-width:1.5px;
+    border-color:#C38EC7;
+}
+
+#examples p {
+    color:#B93B8F;
+    font-size:16px;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+#footer_bg {
+    background-color:#F9B7FF;
+}
+
+#footer {
+    min-height:200px;
+    width:100%;
+    overflow:hidden;
+    border-top:solid;
+    border-width:1.5px;
+    border-color:#C38EC7;
+    padding-top:20px;
+}
+
+#sitemap {
+  float:left;
+  clear:both;
+  left:10%;
+}
+
+  #sitemap p {
+    color:#C25A7C;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:13px;
+  }
+
+  #sitemap a {
+    color:#C25A7C;
+    font-family:Arial, Helvetica, sans-serif;
+    text-decoration:none;
+  }
+
+  #sitemap a:hover {
+    color:#7E354D;
+    font-family:Arial, Helvetica, sans-serif;
+  }
+
+#copyright {
+  float:right;
+  clear:both;
+}
+
+  #copyright p {
+    color:#B93B8F;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:13px;
+  }
+
