@@ -66,16 +66,8 @@ body {
     font-size:50px;
 }
 
-/*.title p{
-    color:#E56717;
-    font-family: Geneva, Tahoma, Verdana, sans-serif;
-    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
-    font-size:12px;
-    font-weight:bold;
-}*/
-
 #main_bg {
-    background-color:#F9B7FF;
+    background-color:#FFFAFA;
 }
 
 #main {
@@ -120,6 +112,14 @@ body {
     font-family: Verdana, Geneva, sans-serif;
 }
 
+#usage a {
+    color:#B93B8F;
+}
+
+#usage a:hover{
+    color:#7E354D;
+}
+
 #examples {
     width:700px;
     float:left;
@@ -137,6 +137,14 @@ body {
     font-family: Verdana, Geneva, sans-serif;
 }
 
+#examples a {
+    color:#B93B8F;
+}
+
+#examples a:hover{
+    color:#7E354D;
+}
+
 #footer_bg {
     background-color:#F9B7FF;
 }
@@ -145,9 +153,6 @@ body {
     min-height:200px;
     width:100%;
     overflow:hidden;
-    border-top:solid;
-    border-width:1.5px;
-    border-color:#C38EC7;
     padding-top:20px;
 }
 
