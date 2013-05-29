@@ -1,0 +1,65 @@
+<html>
+<head>
+    <link rel=StyleSheet href="simple.css" type="text/css">
+</head>
+<body>
+    <a href="https://github.com/guptakaran11/lewinsky"><img style="position:fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+    <div id="header_bg">
+        <div class="content">
+            <div id="header">
+                <div onclick="location.href='index.html';" class="title">
+                    <h1>lew!nsky</h1>
+                </div>
+                <div id="nav_bar">
+                    <div class="nav_el">
+                        <a href="index.html">Home</a>
+                    </div>
+                    <div class="nav_el">
+                        <a href="examples.html">Examples</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="main_bg">
+        <div class="content">
+            <div id="main">
+                <div id="usage_full">
+                    <p>Lewinsky works on a simple mail interface. You simply need to mail your notes to  <a href="mailto:note@mylewinsky.com">note@mylewinsky.com</a>. Lewinsky parses and stores your note for you. A note is the basic entity in Lewinsky.</p>
+                    <br><h3>Subject</h3>
+                    <p>Every note has a subject. The subject of the mail directly translates to the subject of the note with the exception of mail jargon like "Re:" "Fwd:" etc. So mail with a repeated subject will stack to the existing note with that subject.<p>
+                    <br><h3>Body</h3>
+                    <p>A note can contain a body. The body of the mail is parsed to remove special tokens (mentioned below) and the remainder becomes the body of the note. This note body is replayed whenever the note is recovered.</p>
+                    <br><h3>Actions</h3>
+                    <p>You can schedule actions on notes. Scheduling an action needs two special tokens "@date" and "@action". The "@date" token needs to be followed by a valid date time in the format YYYY-MM-ddTHH:mm. This will be the date time for the action scheduled on the note. The "@action" token needs to be follwed by one of the valid actions : "mail", "call" or "msg". There can be multiple "@action" tokens.<br><br>
+                    <span style="font-weight:bold;">mail</span> - The mail action looks for valid email ids in the recipient list (see below). In case no valid recipient is specified, it mails back to the creator of the note.<br>
+                    <span style="font-weight:bold;">call, msg</span> - The call and msg actions look for valid phone numbers in the recipient list (see below). A valid phone number is the complete number with international code. In case no valid phone number is provided, there is no action performed.<br><br>
+                    In case you want to cancel a scheduled action you can mantion a valid action to cancel after a "@cancel" special token.</p>
+                    <br><h3>Repetition</h3>
+                    <p>In case you want to schedule recurring actions, you can set a repeat pattern. The repeat pattern can be specified after a "@repeat" special token and can have the following self explanatory values : yearly / monthly / weekly / daily / hourly.<br>
+                    In case of repeated actions it is always the up to date note that will be replayed.</p>
+                    <br><h3>Recipients</h3>
+                    <p>Scheduled actions can have valid recipients for the actions in the form of email ids (mail action) or phone numbers (call and msg actions). The recipient can be specified after a "@to" special token.</p><br>
+                    <br><p>You can take a look at some example scripts <a href="examples.html">here</a> for a better understanding.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer_bg">
+        <div class="content">
+            <div id="footer">
+                <div id="sitemap">
+                    <p>Sitemap :
+                        <a href="index.html">Home</a> |
+                        <a href="usage.html">Usage</a> |
+                        <a href="examples.html">Examples</a>
+                    </p>
+                </div>
+                <div id="copyright">
+                    <p>Copyright &copy; 2013 grasskode. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
