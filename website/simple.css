@@ -213,6 +213,10 @@ body {
 }
 
 #usage_full h3{
-    color:#B93B8F;
+    color:#250517;
     font-family: Verdana, Geneva, sans-serif;
 }
+
+#usage_full h2{
+    color:#250517;
+    font-family: Verdana, Geneva, sans-serif;

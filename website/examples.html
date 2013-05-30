@@ -24,11 +24,29 @@
     <div id="main_bg">
         <div class="content">
             <div id="main">
-                <div id="examples">
+                <div id="usage_full">
+                    <h2>Scheduling Reminders</h2>
+                    <p>The following mail will get resent to the user at 8:00 AM on 30th February 2020.</p><br>
+                    <p style='color:#7E587E; font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;    '>
+                    Subject : Reminder<br>
+                    Body : Remind me about this again tomorrow morning. @action mail @date 2020-02-30T08:00
+                    </p><br>
+                    <p>Now if you want the reminder to be repeated daily, you simply send another mail with the same subject and a repeat token.</p><br>
+                    <p style='color:#7E587E; font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;'>
+                    Subject : Reminder<br>
+                    Body : @repeat daily
+                    </p><br>
+                    <p>If you want the scheduled reminder to go to someone@something.com instead of yourself, then you simply add that email id in the recipient list.</p><br> 
+                    <p style='color:#7E587E; font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;'>
+                    Subject : Reminder<br>
+                    Body : @to someone@something.com
+                    </p><br>
+                    <p>Note that if a valid mail recipient is available, lewinsky will not send the reminder back to the user which was its default recipient. You will explicitly need to add your email id to the list if you want to continue receiving the reminders.</p><br>
+                    <h2>The Forgetful Boyfriend</h2>
                     <p>Say its 3 AM and you suddenly realise that you have forgot your girlfriend's birthday. Her phone's switched off. Now you have to buy her an expensive gift tomorrow. You want to be reminded about it at 6 PM when you leave office. Send this mail to note@mylewinsky.com :</p><br>
                     <p style='color:#7E587E; font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;'>
                     Subject : Buy Gift<br>
-                    Body : Buy a shit expensive gift or you will get no cookies! @action mail @date YYYY-MM-ddT18:00
+                    Body : Buy a shit expensive gift or you will get no cookies! @action mail @date 2020-02-30T18:00
                     </p><br>
                     <p>Now lets say you think you might not check the mail since you might be on road and you want to be called to remind you the same. Send another mail to note@mylewinsky.com :</p><br>
                     <p style='color:#7E587E; font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;'>
@@ -36,7 +54,23 @@
                     Body : @action call @to +91xxxxxxxxxx
                     </p><br>
                     <p>Since the subject is the same, you need not specify the body. The body of the last message will be played back to you in the call. At the same time as was specified in the last mail.</p><br>
-                    <p>Check out more elaborate examples <a href="examples.html">here</a>.</p>
+                    <h2>The Dog Killer</h2>
+                    <p>You are woken from your sleep by the neighbour's barking dog in the middle of the night. You decide to kill it the first thing in the morning</p><br>
+                    <p style='color:#7E587E; font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;'>
+                    Subject : Murder<br>
+                    Body : Kill the neighbour's dog @date 2020-02-30T08:00 @action mail @action call @to +91xxxxxxxxxx
+                    </p><br>
+                    <p>Oh! You forgot to remind yourself to bury it.</p><br>
+                    <p style='color:#7E587E; font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;'>
+                    Subject : Murder<br>
+                    Body : Remember to bury the furball
+                    </p><br>
+                    <p>And since it is a big dog with great big teeth, you might want a friend's help as well.</p><br>
+                    <p style='color:#7E587E; font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;'>
+                    Subject : Murder<br>
+                    Body : @to myself@myself.com @to friend@friend.com
+                    </p><br>
+                    <p>Now you can go back to sleep...</p><br>
                 </div>
             </div>
         </div>
