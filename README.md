@@ -1,3 +1,5 @@
+### Introduction
+
 [Lewinsky](http://www.mylewinsky.com/) is her name. And her job is to keep you stress-free! She lets you forget things. Just drop her a mail and she will take note of whatever it is that you need to forget.
 
 Lewinsky is the PA for the lazy. It works on a simple mailing interface. You can use lewinsky to take notes and set up reminders. And what's new with that? For one, lewinsky stacks your notes. You can add on to the same note over time. Still not impressed? Lewinsky can replay your notes to you as reminders. Now you can let your imagination fly. Using the two, you can build up agendas, set alarms, automate sick leave mails, etc.
@@ -5,7 +7,7 @@ Lewinsky is the PA for the lazy. It works on a simple mailing interface. You can
 So get creative; try her out!
 
 
-## USAGE
+### Usage
 
 To use Lewinsky you simply need to mail your notes to note@mylewinsky.com. The subject of the note will map to the subject of the note and the body of the mail will be the note with the exception of a few special tokens. Simple enough?
 
@@ -14,7 +16,7 @@ You can stack to the same note by mailing Lewinsky again with the same subject l
 Check out the full usage documentation [here](http://www.mylewinsky.com/usage.html).
 
 
-## EXAMPLES
+### Examples
 
 Say its 3 AM and you suddenly realise that you have forgot your girlfriend's birthday. Her phone's switched off. Now you have to buy her an expensive gift tomorrow. You want to be reminded about it at 6 PM when you leave office. Send this mail to note@mylewinsky.com :
 
