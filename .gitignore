@@ -4,3 +4,5 @@ logs/*
 *.swp
 data/*
 settings.json
+*.log
+settings.json.local

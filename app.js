@@ -8,6 +8,10 @@ app.use(express.logger(CONFIG.env));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(function(req, res, next) {
+  logger.info(req);
+  next();
+});
 app.use(function(err, req, res, next) {
   // only handle `next(err)` calls
   logger.error(err);
